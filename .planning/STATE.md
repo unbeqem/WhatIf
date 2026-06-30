@@ -12,14 +12,22 @@
 
 ## Current Position
 
-**Phase:** — (none active yet)
-**Plan:** — (none active yet)
-**Status:** Roadmap approved; awaiting `/gsd-plan-phase 1`
-**Progress:** 0/4 phases complete
+**Phase:** 1 — Rate-Limiting + User-System
+**Plan:** 05 (Auth UI + paywall) — code complete; Task 3 (founder checkpoint) pending
+**Status:** Awaiting founder Supabase + Upstash setup + 21-step verification.
+**Progress:** 0/4 phases complete (1 code-complete, awaiting verification)
 
 ```
-[░░░░░░░░░░░░░░░░░░░░] 0%   (0 / 29 v1 requirements delivered)
+[█████░░░░░░░░░░░░░░░] 25% code-complete   (12 / 29 v1 requirements written, 0 verified)
 ```
+
+**Phase 1 commits:**
+- f96263d — Plan 01 Supabase + Upstash infra
+- 491bb44 — Plan 02 lib/anon.ts
+- f107f2d — Plan 03 6 auth routes + validator
+- cc3250e — Plan 04 gated /api/simulate
+- 5a6e02e — Plan 05 auth UI + paywall (Task 1+2)
+- (Task 3 founder checkpoint: PENDING)
 
 ## Performance Metrics
 
@@ -51,19 +59,20 @@
 
 ### Todos
 
-- Plan Phase 1 via `/gsd-plan-phase 1`.
+- Founder: provision Supabase (EU) + Upstash, run migration, fill `.env.local`, walk the 21-step verification in Plan 05 Task 3.
+- After Task 3 approval: `/gsd-plan-phase 2` (Stripe Webhook + Pro-Unlock).
 
 ### Blockers
 
-None.
+- Phase 1 verification gated on real Supabase + Upstash accounts (founder action).
 
 ## Session Continuity
 
 ### Last action
-- `gsd-roadmapper` created `ROADMAP.md` mapping all 29 v1 requirements across 4 phases. Phase order matches founder-locked sequence.
+- Phase 1 code shipped across 5 commits + 1 MVP fix. tsc clean, next build clean. Plan 05 Task 3 (blocking human-verify checkpoint) reached — execution paused for founder setup.
 
 ### Next action
-- Run `/gsd-plan-phase 1` to decompose Phase 1 (Rate-Limiting + User-System) into executable plans.
+- Founder runs Supabase + Upstash setup + 21-step verification (see Plan 05 Task 3). On `approved`, mark Phase 1 done and run `/gsd-plan-phase 2`.
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions
