@@ -267,7 +267,7 @@ export default function Home() {
                   ))}
                 </ul>
 
-                {"plan" in tier.cta ? (
+                {"plan" in tier.cta && tier.cta.plan ? (
                   <UpgradeButton plan={tier.cta.plan}>{tier.cta.label}</UpgradeButton>
                 ) : (
                   <Link
