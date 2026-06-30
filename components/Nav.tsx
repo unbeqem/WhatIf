@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import AuthNav from "@/components/AuthNav";
 
 const LINKS = [
   { href: "/#how-it-works", label: "How it works" },
@@ -53,6 +54,7 @@ export default function Nav() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <AuthNav />
           <Link
             href="/decision"
             className="group inline-flex items-center gap-1.5 rounded-full border border-border-hi bg-surface/60 px-4 py-2 text-sm font-medium text-fg backdrop-blur-sm transition-all hover:border-violet-glow/60 hover:bg-surface-hi"

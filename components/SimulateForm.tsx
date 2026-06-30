@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import PaywallNotice from "@/components/PaywallNotice";
 
 const EXAMPLES = [
   "Should I quit my job to go full-time on my side project?",
@@ -25,6 +26,7 @@ export default function SimulateForm() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paywall, setPaywall] = useState<"anon_daily" | "free_daily" | null>(null);
   const [phaseIdx, setPhaseIdx] = useState(0);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
@@ -48,6 +50,7 @@ export default function SimulateForm() {
       return;
     }
     setError(null);
+    setPaywall(null);
     setLoading(true);
 
     try {
@@ -59,6 +62,18 @@ export default function SimulateForm() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
+        if (res.status === 429 && data.error === "limit_reached") {
+          setPaywall(data.limit === "free_daily" ? "free_daily" : "anon_daily");
+          setLoading(false);
+          return;
+        }
+        if (res.status === 429 && data.error === "rate_limited") {
+          setError(
+            `Too many requests. Try again in ${data.retryAfterSec ?? 60}s.`,
+          );
+          setLoading(false);
+          return;
+        }
         setError(data.error ?? "Something went wrong. Try again.");
         setLoading(false);
         return;
@@ -140,6 +155,8 @@ export default function SimulateForm() {
                 {error}
               </div>
             )}
+
+            {paywall && <PaywallNotice limit={paywall} />}
 
             <div className="mt-8">
               <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-fg-mute">
