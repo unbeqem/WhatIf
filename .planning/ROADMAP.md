@@ -38,7 +38,12 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   3. A logged-in free user can run exactly one simulation per 24h; the counter is stored server-side in Supabase, not the client.
   4. `/api/simulate` rejects bursts above ~5/min per IP and rejects inputs outside the 8–1500 char window, and rejected attempts are written to a Supabase log row a human can inspect.
   5. A user who forgot their password can request a reset email and successfully change their password via the emailed link.
-**Plans**: TBD
+**Plans**: 5 plans
+  - [ ] 01-01-supabase-upstash-infra-PLAN.md — Supabase + Upstash clients, DB schema, RLS, middleware
+  - [ ] 01-02-anon-identification-PLAN.md — Signed device cookie + IP-hash fallback
+  - [ ] 01-03-auth-routes-PLAN.md — Six auth route handlers (signup/login/logout/confirm/reset-request/reset-confirm)
+  - [ ] 01-04-gated-simulate-route-PLAN.md — Plan-aware /api/simulate with burst, quota, and abuse log
+  - [ ] 01-05-auth-ui-paywall-PLAN.md — Four auth pages + AuthNav + SimulateForm paywall surface
 **UI hint**: yes
 **Notes**: The MVP already shows a soft-paywall hint on `/result` and renders "Unlock Pro" buttons — this phase wires those to real auth state and a real DB counter, it does not build the UI shell from scratch.
 
