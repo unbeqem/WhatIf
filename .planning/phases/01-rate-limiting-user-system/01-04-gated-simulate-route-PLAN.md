@@ -286,6 +286,9 @@ export async function logUsage(args: {
       }
 
       // anon: OR(anon_id, ip_hash)
+      // SAFE INTERPOLATION: actor.anonId is a server-generated UUID (lib/anon.ts randomUUID)
+      // and ipHash is a 64-char hex digest. Neither is user-controlled. Do NOT interpolate
+      // any user input into the .or() filter string — PostgREST treats it as a query DSL.
       const { count, error } = await supabaseAdmin
         .from("simulation_usage")
         .select("id", { count: "exact", head: true })
@@ -347,7 +350,8 @@ export async function logUsage(args: {
     - `grep -c "export async function checkQuota" lib/quota.ts` returns 1.
     - `grep -c "export async function resolveActor" lib/quota.ts` returns 1.
     - `grep -c "export async function logUsage" lib/quota.ts` returns 1.
-    - `grep -c "anon_id.eq.\${actor.anonId},ip_hash.eq.\${ipHash}" lib/quota.ts` returns 1 (USAGE-01 cookie+IP OR).
+    - `grep -F -c 'anon_id.eq.${actor.anonId},ip_hash.eq.${ipHash}' lib/quota.ts` returns 1 (USAGE-01 cookie+IP OR — uses -F so `${...}` is a literal match).
+    - `grep -c "SAFE INTERPOLATION" lib/quota.ts` returns 1 (W3: defense-in-depth comment about server-generated values present).
     - `grep -c '"free_daily"' lib/quota.ts` returns >= 1.
     - `grep -c '"anon_daily"' lib/quota.ts` returns >= 1.
     - `grep -cE 'plan === "pro" \|\| actor.plan === "creator"' lib/quota.ts` returns 1 (USAGE-03 bypass).

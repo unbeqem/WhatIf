@@ -437,7 +437,7 @@ supabase.auth.onAuthStateChange((event, session) => {/* react */});
     - `grep -c "isSupabaseConfigured" components/AuthNav.tsx` returns >= 1.
     - `grep -c '"/#pricing"' components/PaywallNotice.tsx` returns 1.
     - `grep -c 'UpgradeButton plan="pro"' components/PaywallNotice.tsx` returns 1.
-    - `grep -c '"anon_daily"\|"free_daily"' components/PaywallNotice.tsx` returns >= 2.
+    - `grep -cE '"anon_daily"|"free_daily"' components/PaywallNotice.tsx` returns >= 2 (W6: uses -E so `|` is alternation, not literal).
     - `npx tsc --noEmit` exits 0.
   </acceptance_criteria>
   <done>Three components compile, follow existing Tailwind tokens, and degrade cleanly when Supabase isn't configured.</done>
@@ -769,6 +769,7 @@ supabase.auth.onAuthStateChange((event, session) => {/* react */});
     2. Expect: 'Check your inbox' state.
     3. Open the Supabase confirmation email, click the link.
     4. Expect: lands on `/?confirmed=1`, Nav now shows your email + Logout.
+       **W4 verification:** the redirect from `/auth/confirm` MUST carry a `Set-Cookie: sb-...` header — open DevTools → Network → click the `/auth/confirm` row → Response headers. If `Set-Cookie` is missing the session won't stick across the redirect and Nav stays anonymous.
     5. Click Logout. Nav reverts to 'Sign in'.
     6. Visit `/login`, sign in with the same credentials. Expect: lands on `/`, Nav shows email again.
     7. Refresh the browser. Expect: session survives (AUTH-03 success-criterion #1).
@@ -780,9 +781,10 @@ supabase.auth.onAuthStateChange((event, session) => {/* react */});
     **Free-tier paywall (USAGE-02, USAGE-04):**
     10. Log in (you should be 'free' plan in Supabase). Run one simulation. Expect: success.
     11. Run a second simulation immediately. Expect: PaywallNotice 'Pro' variant with Pro CTA.
+        **W1 note (accepted by design):** Opening two browser tabs and clicking Simulate in both within ~100ms can race past `checkQuota` and grant 2 sims in a 24h window instead of 1. The `T-04-08` threat model entry accepts this — the ceiling is 2, not unbounded, and an advisory lock isn't worth the v1 complexity. Don't file it as a bug.
 
     **Burst guard (ABUSE-01):**
-    12. With a tool of choice (or rapid clicking), POST 6 requests to /api/simulate within ~30s. Expect: the 6th returns 429 `{ "error": "rate_limited" }` and the UI shows 'Too many requests. Try again in Xs.'
+    12. **W7:** Open a **fresh Incognito window** (the session from step 11 has already exhausted its quota — the burst limiter would never be exercised through the UI). From a terminal: `for i in {1..6}; do curl -X POST http://localhost:3000/api/simulate -H "Content-Type: application/json" -d '{"input":"this is a valid input for burst testing"}' -w "\n%{http_code}\n"; done`. Expect: requests 1-5 return 200 or 429-`limit_reached` (anon quota), and request 6 returns 429 `{ "error": "rate_limited" }` with a `Retry-After` header.
 
     **Input validation (ABUSE-02):**
     13. Submit a 5-char input. Expect: 400 'Tell me a little more — at least a sentence.'

@@ -372,7 +372,9 @@ type AuthErr =
       }
 
       // `next` lets reset-confirm flow redirect to /reset; default confirms email and lands on /.
-      const target = next.startsWith("/") ? next : "/";
+      // Reject both external URLs (must start with "/") AND protocol-relative URLs ("//evil.com"
+      // also starts with "/" but new URL() would resolve it off-origin) — W2 fix.
+      const target = next.startsWith("/") && !next.startsWith("//") ? next : "/";
       const successUrl = target === "/"
         ? new URL("/?confirmed=1", url.origin)
         : new URL(target, url.origin);
@@ -467,6 +469,7 @@ type AuthErr =
     - `grep -c "exchangeCodeForSession" app/auth/confirm/route.ts` returns 1.
     - `grep -c "missing_code" app/auth/confirm/route.ts` returns 1.
     - `grep -c "confirmation_failed" app/auth/confirm/route.ts` returns 1.
+    - `grep -cE '!next\.startsWith\("//"\)' app/auth/confirm/route.ts` returns 1 (W2: rejects protocol-relative open redirect).
     - `grep -c "resetPasswordForEmail" app/auth/reset-request/route.ts` returns 1.
     - `grep -c "next=/reset" app/auth/reset-request/route.ts` returns 1 (UI landing target).
     - `grep -c "updateUser" app/auth/reset-confirm/route.ts` returns 1.

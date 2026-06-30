@@ -265,6 +265,7 @@ export const config = {
   </verify>
   <acceptance_criteria>
     - `grep -E '"(@supabase/ssr|@supabase/supabase-js|@upstash/ratelimit|@upstash/redis)"' package.json` returns 4 matching lines.
+    - `grep -c "@supabase/auth-helpers-nextjs" package.json` returns 0 (the deprecated package must NOT be installed).
     - `grep -E '^(NEXT_PUBLIC_SUPABASE_URL|NEXT_PUBLIC_SUPABASE_ANON_KEY|SUPABASE_SERVICE_ROLE_KEY|UPSTASH_REDIS_REST_URL|UPSTASH_REDIS_REST_TOKEN|ANON_COOKIE_SECRET)=' .env.example` returns 6 matching lines.
     - Existing keys (`OPENAI_API_KEY`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_URL`) still present in `.env.example`.
     - `npm install` exits 0; `node_modules/@supabase/ssr/package.json` exists.
