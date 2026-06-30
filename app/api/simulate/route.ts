@@ -1,34 +1,132 @@
 import { NextRequest, NextResponse } from "next/server";
 import { simulateDecision } from "@/lib/openai";
+import { getAnonIdentity } from "@/lib/anon";
+import { checkBurst } from "@/lib/ratelimit";
+import { checkQuota, logUsage, resolveActor } from "@/lib/quota";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-export async function POST(req: NextRequest) {
-  try {
-    const { input } = await req.json();
+const MIN_INPUT = 8;
+const MAX_INPUT = 1500;
 
-    if (typeof input !== "string" || input.trim().length < 8) {
-      return NextResponse.json(
+export async function POST(req: NextRequest) {
+  // -------- Step 0: parse + validate input (ABUSE-02) --------
+  const body = await req.json().catch(() => null);
+  const input = typeof body?.input === "string" ? body.input : "";
+  const trimmedLen = input.trim().length;
+
+  // Resolve identity now so we can log validation failures consistently.
+  const anon = getAnonIdentity(req);
+
+  // Optional: who's logged in? (works in demo mode -- returns null user)
+  let supabaseUserId: string | null = null;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    try {
+      const supabase = await createSupabaseServerClient();
+      const { data } = await supabase.auth.getUser();
+      supabaseUserId = data?.user?.id ?? null;
+    } catch (e) {
+      console.error("[simulate] auth.getUser error", e);
+    }
+  }
+  const actor = await resolveActor(
+    supabaseUserId ? { id: supabaseUserId } : null,
+    anon.anonId,
+  );
+
+  function applyCookie(res: NextResponse) {
+    if (anon.cookieToSet) {
+      res.cookies.set(anon.cookieToSet.name, anon.cookieToSet.value, anon.cookieToSet.options);
+    }
+    return res;
+  }
+
+  if (trimmedLen < MIN_INPUT) {
+    await logUsage({
+      actor,
+      ipHash: anon.ipHash,
+      inputLength: input.length,
+      blockedReason: "input_too_short",
+    });
+    return applyCookie(
+      NextResponse.json(
         { error: "Tell me a little more — at least a sentence." },
         { status: 400 },
-      );
-    }
+      ),
+    );
+  }
 
-    if (input.length > 1500) {
-      return NextResponse.json(
+  if (input.length > MAX_INPUT) {
+    await logUsage({
+      actor,
+      ipHash: anon.ipHash,
+      inputLength: input.length,
+      blockedReason: "input_too_long",
+    });
+    return applyCookie(
+      NextResponse.json(
         { error: "Decision is too long. Keep it under 1500 characters." },
         { status: 400 },
-      );
-    }
+      ),
+    );
+  }
 
+  // -------- Step 1: per-IP burst guard (ABUSE-01) --------
+  const burst = await checkBurst(anon.ipHash);
+  if (!burst.allowed) {
+    await logUsage({
+      actor,
+      ipHash: anon.ipHash,
+      inputLength: input.length,
+      blockedReason: "burst",
+    });
+    const res = NextResponse.json(
+      { error: "rate_limited", retryAfterSec: burst.retryAfterSec },
+      { status: 429 },
+    );
+    res.headers.set("Retry-After", String(burst.retryAfterSec));
+    return applyCookie(res);
+  }
+
+  // -------- Step 2: plan-aware daily quota (USAGE-01..03) --------
+  const quota = await checkQuota(actor, anon.ipHash);
+  if (!quota.allowed) {
+    await logUsage({
+      actor,
+      ipHash: anon.ipHash,
+      inputLength: input.length,
+      blockedReason: quota.reason,
+    });
+    return applyCookie(
+      NextResponse.json(
+        { error: "limit_reached", limit: quota.reason },
+        { status: 429 },
+      ),
+    );
+  }
+
+  // -------- Step 3: run the simulation --------
+  try {
     const result = await simulateDecision(input);
-    return NextResponse.json(result);
+
+    // -------- Step 4: log the accepted usage (counts toward 24h cap) --------
+    await logUsage({
+      actor,
+      ipHash: anon.ipHash,
+      inputLength: input.length,
+      // no blockedReason -> counts toward quota
+    });
+
+    return applyCookie(NextResponse.json(result));
   } catch (err) {
     console.error("[simulate] error", err);
-    return NextResponse.json(
-      { error: "The oracle is silent. Try again in a moment." },
-      { status: 500 },
+    return applyCookie(
+      NextResponse.json(
+        { error: "The oracle is silent. Try again in a moment." },
+        { status: 500 },
+      ),
     );
   }
 }

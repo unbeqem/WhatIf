@@ -21,6 +21,7 @@ export type Database = {
           stripe_customer_id: string | null;
           updated_at: string;
         }>;
+        Relationships: [];
       };
       simulation_usage: {
         Row: {
@@ -42,8 +43,12 @@ export type Database = {
         Update: Partial<{
           blocked_reason: string | null;
         }>;
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Enums: { plan_tier: PlanTier };
+    CompositeTypes: Record<string, never>;
   };
 };
