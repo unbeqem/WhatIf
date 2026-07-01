@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import UpgradeButton from "@/components/UpgradeButton";
+import ShareCard from "@/components/ShareCard";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
 import type { SimulationResult, Scenario } from "@/lib/types";
 
@@ -154,8 +155,8 @@ export default function ResultView() {
         </div>
       </motion.div>
 
-      {/* Actions (+ upsell for non-subscribers) */}
-      <div className={showUpsell ? "grid gap-4 md:grid-cols-3" : "grid gap-4"}>
+      {/* Actions (+ upsell for non-subscribers + Share/Creator export) */}
+      <div className={`grid gap-4 ${showUpsell ? "md:grid-cols-3" : me ? "md:grid-cols-2" : ""}`}>
         <Link
           href="/decision"
           className="group inline-flex items-center justify-between rounded-2xl border border-border bg-surface/40 p-5 transition-colors hover:border-border-hi hover:bg-surface-hi"
@@ -197,6 +198,8 @@ export default function ResultView() {
             </div>
           </div>
         )}
+
+        <ShareCard input={input} result={result} me={me} />
       </div>
     </div>
   );
