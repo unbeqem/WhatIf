@@ -89,7 +89,8 @@ export default function StoryCard({ input, result }: Props) {
       <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
         {scenarios.map((s, i) => {
           const st = styleFor(s.tag);
-          const pct = Math.max(0, Math.min(100, Math.round(s.probability ?? 0)));
+          const rawPct = Number(s.probability);
+          const pct = Math.max(0, Math.min(100, Math.round(Number.isFinite(rawPct) ? rawPct : 0)));
           return (
             <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
