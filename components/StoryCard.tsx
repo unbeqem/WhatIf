@@ -82,8 +82,8 @@ export default function StoryCard({ input, result }: Props) {
           overflow: "hidden",
         } as React.CSSProperties}
       >
-        &ldquo;{input}&rdquo;
-      </div>
+        {`“${input}”`}
+</div>
 
       {/* Three futures */}
       <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
