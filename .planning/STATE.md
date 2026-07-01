@@ -130,6 +130,7 @@ progress:
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260701-01 | Postgres-backed per-IP burst guard (replaces Upstash) | 2026-07-01 | 9eedee6 | [260701-01-postgres-burst-guard](./quick/260701-01-postgres-burst-guard/) |
+| 260701-nnc | Swap placeholder contact email + cosmetic domain to real values (business@what-if.tech, what-if.tech) | 2026-07-01 | cadd82c | [260701-nnc-swap-contact-email-domain](./quick/260701-nnc-swap-contact-email-domain/) |
 
 ## Session Continuity
 
