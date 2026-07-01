@@ -4,10 +4,12 @@ import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import DemoPreview from "@/components/DemoPreview";
 import UpgradeButton from "@/components/UpgradeButton";
+import Testimonials from "@/components/Testimonials";
+import Faq from "@/components/Faq";
 
 const COUNTERS = [
-  { value: "10,247", label: "decisions simulated" },
-  { value: "3", label: "futures per question" },
+  { value: "3", label: "possible futures, every time" },
+  { value: "€0", label: "to try your first" },
   { value: "< 8s", label: "to your answer" },
 ];
 
@@ -221,6 +223,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PROOF */}
+      <section id="proof" className="relative">
+        <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-violet-glow">
+              What people say
+            </div>
+            <h2 className="font-display text-4xl leading-tight md:text-5xl">
+              People trust it with the decisions they were avoiding.
+            </h2>
+          </div>
+
+          <div className="mt-14">
+            <Testimonials />
+          </div>
+        </div>
+      </section>
+
       {/* PRICING */}
       <section id="pricing" className="relative">
         <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
@@ -283,6 +303,24 @@ export default function Home() {
 
           <div className="mt-10 text-center text-xs text-fg-mute">
             Cancel anytime. No hidden tiers. The oracle keeps no grudges.
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="relative">
+        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-cyan-glow">
+              FAQ
+            </div>
+            <h2 className="font-display text-4xl leading-tight md:text-5xl">
+              Questions before you ask the oracle one.
+            </h2>
+          </div>
+
+          <div className="mt-14">
+            <Faq />
           </div>
         </div>
       </section>

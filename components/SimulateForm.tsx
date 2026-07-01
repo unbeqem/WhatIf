@@ -6,11 +6,14 @@ import { motion, AnimatePresence } from "motion/react";
 import PaywallNotice from "@/components/PaywallNotice";
 
 const EXAMPLES = [
-  "Should I quit my job to go full-time on my side project?",
-  "Should I move from Munich to Lisbon for two years?",
-  "Should I end my five-year relationship?",
+  "Should I quit my stable job to go all-in on my side project?",
+  "Should I move across the world for someone I've known six months?",
+  "Should I end a five-year relationship that's just… fine?",
   "Should I take the €40k offer or counter and risk losing it?",
   "Should I have a kid this year or wait two more?",
+  "Should I drop out to build this, or finish the degree?",
+  "Should I cut off a family member for my own sanity?",
+  "Should I sink my savings into this apartment or keep renting?",
 ];
 
 const ORACLE_PHASES = [
