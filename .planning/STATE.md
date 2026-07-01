@@ -1,7 +1,7 @@
 # STATE: WhatIf
 
-**Last updated:** 2026-06-30
-**Updated by:** gsd-roadmapper (initialization)
+**Last updated:** 2026-07-01
+**Updated by:** gsd-quick (260701-01) — Phase 1 verification closed
 
 ## Project Reference
 
@@ -13,9 +13,9 @@
 ## Current Position
 
 **Phase:** 1 — Rate-Limiting + User-System
-**Plan:** 05 (Auth UI + paywall) — code complete; Task 3 partial (15/21 verify steps ✓)
-**Status:** Paused mid-verification. Steps 16-19 (password reset) blocked on Supabase rate limit; Step 12 (burst) deferred (no Upstash); Steps 20-21 (demo regression) pending.
-**Progress:** 0/4 phases complete (1 code-complete, partially verified)
+**Plan:** 05 (Auth UI + paywall) — code complete; Task 3 verification 21/21 ✓
+**Status:** Verification COMPLETE. Password reset fixed via token_hash + Resend SMTP (16-19 ✓); demo-mode regression confirmed (20-21 ✓); burst guard re-backed on Postgres and verified (12 ✓, quick task 260701-01). Phase 1 ready to close.
+**Progress:** 0/4 phases complete (Phase 1 code + verification complete — ready to mark done)
 
 ```
 [█████░░░░░░░░░░░░░░░] 25% code-complete   (12 / 29 v1 requirements written, 9 verified live)
@@ -26,11 +26,11 @@
 - [x] 5-7 Logout → Login → Refresh session survives (AUTH-03)
 - [x] 8-9 Anon paywall in Incognito (USAGE-01, USAGE-04)
 - [x] 10-11 Free-tier paywall logged in, DB row with user_id confirmed (USAGE-02)
-- [ ] 12 Burst guard 5/min — DEFERRED (no Upstash account yet)
+- [x] 12 Burst guard 5/min — DONE via quick task 260701-01. Re-backed on Supabase Postgres (Upstash dashboard unreachable). Verified: 6th rapid request from one IP → `rate_limited` 429.
 - [x] 13-14 Input validation 5/1600 chars (ABUSE-02)
 - [x] 15 Abuse log visible in Supabase with blocked_reason vocabulary (ABUSE-03)
-- [ ] 16-19 Password reset — BLOCKED: Supabase free tier rate limit (3 emails/h) hit. Bug found + fixed (PKCE verifier loss on cross-origin email redirect). `/auth/confirm` now supports OTP `token_hash` flow alongside PKCE (commit 97996f4). User still needs to update Supabase email template to use `{{ .TokenHash }}` format.
-- [ ] 20-21 Demo-mode regression check (comment out env vars, restart, verify MVP fallback)
+- [x] 16-19 Password reset — FIXED. Root cause: PKCE code_verifier lost on cross-origin email redirect. `/auth/confirm` supports OTP `token_hash` (commit 97996f4); Supabase email templates switched to `{{ .TokenHash }}` links; Resend custom SMTP configured (escapes the 3-emails/h built-in cap). Verified end-to-end with tristank2005@web.de.
+- [x] 20-21 Demo-mode regression check — PASS. Keyless run (Supabase/Upstash/OpenAI/Stripe off): `/api/simulate` returns demo simulation, `/api/stripe` returns demo checkout, input validation still enforced. .env.local restored.
 
 **Phase 1 commits:**
 - f96263d — Plan 01 Supabase + Upstash infra
@@ -42,11 +42,10 @@
 - (Task 3 founder checkpoint: PARTIAL ~70% done)
 
 **To resume:**
-1. Update Supabase email templates (Authentication → Email Templates) — replace `{{ .ConfirmationURL }}` lines with `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset` (for Reset Password) and `&type=email&next=/` (for Confirm Signup).
-2. Either wait for rate limit reset (~1h) OR set up custom SMTP (Resend free tier) OR have me generate a reset link via admin.generateLink (bypasses email).
-3. Walk steps 16-19. Then steps 20-21 (env vars comment out + restart, MVP fallback works).
-4. Optional: Upstash account → uncomment in `.env.local` → step 12.
-5. Mark Phase 1 done → `/gsd-plan-phase 2` (Stripe Webhook + Pro-Unlock).
+1. Apply migration `0002_burst_ip_index.sql` in Supabase (SQL editor or `supabase db push`) — perf only; burst guard already correct without it.
+2. Mark Phase 1 done → `/gsd-plan-phase 2` (Stripe Webhook + Pro-Unlock).
+3. Backlog (Phase 4): register the WhatIf product domain (co-orga is the employer, not owned) for prod Site URL + Resend domain verification + Stripe.
+4. Optional cleanup: `npm remove @upstash/ratelimit @upstash/redis` (deps now unused).
 
 **Test user details:**
 - Supabase project: `zdirwmqfoynxmfifzlvt` (EU)
@@ -89,7 +88,13 @@
 
 ### Blockers
 
-- Phase 1 verification gated on real Supabase + Upstash accounts (founder action).
+- None. (Was: Upstash provisioning — resolved by switching the burst guard to Postgres in quick task 260701-01.)
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260701-01 | Postgres-backed per-IP burst guard (replaces Upstash) | 2026-07-01 | 9eedee6 | [260701-01-postgres-burst-guard](./quick/260701-01-postgres-burst-guard/) |
 
 ## Session Continuity
 
@@ -97,7 +102,7 @@
 - Phase 1 code shipped across 5 commits + 1 MVP fix. tsc clean, next build clean. Plan 05 Task 3 (blocking human-verify checkpoint) reached — execution paused for founder setup.
 
 ### Next action
-- Founder runs Supabase + Upstash setup + 21-step verification (see Plan 05 Task 3). On `approved`, mark Phase 1 done and run `/gsd-plan-phase 2`.
+- Phase 1 verification complete (21/21). Mark Phase 1 done and run `/gsd-plan-phase 2` (Stripe Webhook + Pro-Unlock). Founder: apply migration 0002 before real traffic.
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions
