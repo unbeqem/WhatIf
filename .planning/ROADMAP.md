@@ -74,7 +74,9 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   3. `/decision` presents ~8 visceral, clip-ready example prompts (replacing the placeholder set from v0) and the "Share this simulation" affordance on `/result` upsells free users to Creator.
   4. A Creator-tier user on `/result` can click "Download story card" and receive a 9:16 PNG branded with the WhatIf logo and their original question, readable at TikTok overlay scale.
   5. The export endpoint returns HTTP 402 with an upsell payload for free and Pro users (not silent failure).
-**Plans**: TBD
+**Plans**: 2 plans (2 waves collapse to 1 — disjoint file ownership, fully parallel)
+  - [ ] 03-01-PLAN.md — Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result (CONTENT-04, EXPORT-01/02/03)
+  - [ ] 03-02-PLAN.md — Landing conversion: FAQ accordion + testimonials/scroll counter + FAQ nav link + 8 rewritten example prompts (CONTENT-01/02/03)
 **UI hint**: yes
 
 ### Phase 4: Live Deploy
@@ -96,7 +98,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 |-------|----------------|--------|-----------|
 | 1. Rate-Limiting + User-System | 5/5 | ✅ Complete (verified 21/21) | 2026-07-01 |
 | 2. Stripe Webhook + Pro-Unlock Flow | 4/4 | ✅ Complete (E2E verified, 6/6 PAY) | 2026-07-01 |
-| 3. Polish + New Features | 0/? | Not started | — |
+| 3. Polish + New Features | 0/2 | Planned | — |
 | 4. Live Deploy | 0/? | Not started | — |
 
 ## Coverage Validation
@@ -113,4 +115,4 @@ No orphans. No duplicates. Order matches founder-locked phase sequence in PROJEC
 
 ---
 *Roadmap created: 2026-06-30*
-*Last updated: 2026-06-30 after initialization*
+*Last updated: 2026-07-01 after Phase 3 planning*
