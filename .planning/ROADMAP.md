@@ -57,7 +57,11 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   3. A Pro or Creator user calling `/api/simulate` bypasses the free-tier daily counter (still subject to the per-IP burst limit from Phase 1).
   4. When a subscription is canceled or fails, `customer.subscription.updated` / `customer.subscription.deleted` downgrades the user back to `plan = 'free'` at period end.
   5. A subscribed user can open the Stripe Customer Portal from their account to update payment method or cancel, without leaving the WhatIf brand context.
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 02-01-PLAN.md — Migration 0003 + lib/stripe.ts core (pinned apiVersion, pure reducer, portal helper) + checkout wiring (PAY-01)
+  - [ ] 02-02-PLAN.md — /api/stripe/webhook: signature verify + idempotent plan flip on 3 events (PAY-02/03/05); confirms PAY-04
+  - [ ] 02-03-PLAN.md — /api/stripe/portal + /account page + AuthNav link (PAY-06)
+  - [ ] 02-04-PLAN.md — vitest setup + pure reducer unit tests (PAY-03/05)
 **UI hint**: yes
 
 ### Phase 3: Polish + New Features
