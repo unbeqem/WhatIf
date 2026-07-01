@@ -1,25 +1,29 @@
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-execute-phase 2 — Phase 2 COMPLETE (E2E verified, 6/6 PAY)
+**Updated by:** gsd-plan-phase 3 — Phase 3 planned + checker-verified
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phases 1 + 2 complete and verified. Next: Phase 3 (Polish + New Features) — `/gsd-plan-phase 3`.
+**Current focus:** Phases 1 + 2 complete. Phase 3 planned + checker-verified — ready to execute: `/gsd-execute-phase 3`.
 
 ## Current Position
 
-**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow — ✅ COMPLETE (founder E2E verified 2026-07-01)
-**Plan:** All 4 plans done + gap-closure 02-05. Founder E2E walk passed: checkout → plan flip → paywall bypass → portal opens → cancel-at-period-end (correctly retains Pro until period end).
-**Status:** All 6 PAY criteria verified live. PAY-05 confirmed via cancel-at-period-end semantics (subscription active until period end → status-based entitlement keeps Pro; `.deleted → free` path unit-tested in 02-04). Gap-closure 02-05 added plan-aware UI (nav CTA + plan badge + result upsell hidden for subscribers) after the founder caught stale UI at the checkpoint.
-**Progress:** 2/4 phases complete
+**Phase:** 3 — Polish + New Features (planned + checker-verified, ready to execute)
+**Plan:** Phases 1+2 COMPLETE. Phase 3: 2 plans in 1 parallel wave (disjoint files). Checker: 0 blockers; 5 warnings fixed (supabaseAdmin null-guard, pinned font URLs, machine-checkable testimonial count, RESEARCH resolved marker, honest counter reframe); VALIDATION.md gate waived (folded into RESEARCH.md as prior phases).
+**Status:** Founder decisions locked: story card via next/og (no new deps), demo-mode allows export as Creator, inline wordmark, fabricated "10,247" counter reframed to an honest animated stat (3 futures) + purged from the hero. Ready for `/gsd-execute-phase 3` (both plans parallel).
+**Progress:** 2/4 phases complete; Phase 3 planned
 
 ```
-[██████████░░░░░░░░░░] 50% (Phases 1+2 done · 21/29 v1 requirements delivered)
+[██████████░░░░░░░░░░] 50% (Phases 1+2 done · 21/29 v1 requirements delivered · Phase 3 planned)
 ```
+
+**Phase 3 plans (.planning/phases/03-polish-new-features/):**
+- 03-01 (Wave 1) — Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result [CONTENT-04, EXPORT-01/02/03]. Commits: plan b50086f→revisions 20ccd23, 1f3c72c.
+- 03-02 (Wave 1) — Landing conversion: FAQ accordion + testimonials/scroll counter (honest FUTURES_PER_DECISION stat) + FAQ nav link + 8 rewritten example prompts + hero fabricated-count purge [CONTENT-01/02/03].
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
 - 02-01 (Wave 1) — DONE. Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]. Commits: 801a7aa, f4eca5b, 408df6a, summary 9d6e578.
@@ -109,10 +113,10 @@
 ## Session Continuity
 
 ### Last action
-- Phase 2 fully verified via founder E2E: checkout with prefilled email → webhook flipped plan to pro → simulate bypassed the free cap → Customer Portal opened from `/account` → cancel-at-period-end correctly retained Pro (status active until period end; DB + Stripe cross-checked live). Gap-closure 02-05 (plan-aware UI: /api/me + useMe, nav badge, CTA, hidden result upsell) committed eb5fc20 after the founder caught stale UI at the checkpoint. ROADMAP + STATE marked Phase 1 and Phase 2 complete.
+- Phase 3 planned (research + UI-SPEC → planner → checker). 2 plans, 1 parallel wave. Checker returned 0 blockers / 5 warnings; all 5 fixed via targeted revisions (commits 20ccd23, 1f3c72c): supabaseAdmin null-guard on the export route, pinned verified font URLs, machine-checkable 3–5 testimonial count, RESEARCH Open Questions marked resolved, and the fabricated "10,247" counter reframed to an honest animated stat + purged from the hero (founder decision).
 
 ### Next action
-- `/gsd-plan-phase 3` — Polish + New Features (FAQ, testimonials, example prompts, Creator-tier 9:16 story-card export). Depends on Phase 2's `plan` field for the Creator export gate.
+- `/gsd-execute-phase 3` — both plans (03-01 story-card export, 03-02 landing conversion) run in parallel (Wave 1). Manual founder step at the phase gate: eyeball a generated story-card PNG for TikTok-scale legibility (EXPORT-02).
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions
