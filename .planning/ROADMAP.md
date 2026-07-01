@@ -22,7 +22,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 ## Phases
 
 - [ ] **Phase 1: Rate-Limiting + User-System** — Supabase Auth, anon + free-tier daily counters, abuse protection on `/api/simulate`
-- [ ] **Phase 2: Stripe Webhook + Pro-Unlock Flow** — Webhook flips DB plan on payment, simulate route honors plan, Customer Portal for self-serve management
+- [ ] **Phase 2: Stripe Webhook + Pro-Unlock Flow** — Webhook flips DB plan on payment, simulate route honors plan, Customer Portal for self-serve management (code complete 2026-07-01; founder E2E verification pending)
 - [ ] **Phase 3: Polish + New Features** — FAQ, testimonials, stronger example prompts, Creator-tier 9:16 story-card export
 - [ ] **Phase 4: Live Deploy** — Live keys, EU Supabase, Vercel custom domain, founder runs a real paid simulation
 
@@ -60,7 +60,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 **Plans**: 4 plans
   - [x] 02-01-PLAN.md — Migration 0003 + lib/stripe.ts core (pinned apiVersion, pure reducer, portal helper) + checkout wiring (PAY-01)
   - [x] 02-02-PLAN.md — /api/stripe/webhook: signature verify + idempotent plan flip on 3 events (PAY-02/03/05); confirms PAY-04
-  - [ ] 02-03-PLAN.md — /api/stripe/portal + /account page + AuthNav link (PAY-06)
+  - [x] 02-03-PLAN.md — /api/stripe/portal + /account page + AuthNav link (PAY-06)
   - [x] 02-04-PLAN.md — vitest setup + pure reducer unit tests (PAY-03/05)
 **UI hint**: yes
 
@@ -95,7 +95,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Rate-Limiting + User-System | 0/? | Not started | — |
-| 2. Stripe Webhook + Pro-Unlock Flow | 2/4 | In Progress|  |
+| 2. Stripe Webhook + Pro-Unlock Flow | 4/4 | Code complete, founder E2E pending | — |
 | 3. Polish + New Features | 0/? | Not started | — |
 | 4. Live Deploy | 0/? | Not started | — |
 

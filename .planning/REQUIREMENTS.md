@@ -35,7 +35,7 @@ Production-launch requirements. Each maps to one phase in `ROADMAP.md`.
 - [x] **PAY-03**: A user with an active Pro/Creator subscription has `plan = 'pro' | 'creator'` in DB; otherwise `'free'`
 - [ ] **PAY-04**: `/api/simulate` reads the plan and bypasses the free-tier limit for Pro/Creator
 - [x] **PAY-05**: When a subscription is canceled or fails, the user is downgraded to Free at period end (Stripe handles the date)
-- [ ] **PAY-06**: User can open Stripe Customer Portal from their account to manage / cancel subscription
+- [x] **PAY-06**: User can open Stripe Customer Portal from their account to manage / cancel subscription
 
 ### Content (CONTENT)
 
@@ -118,7 +118,7 @@ Mapped to phases during roadmap creation. Updated by `gsd-roadmapper`.
 | PAY-03 | Phase 2 | Complete |
 | PAY-04 | Phase 2 | Pending |
 | PAY-05 | Phase 2 | Complete |
-| PAY-06 | Phase 2 | Pending |
+| PAY-06 | Phase 2 | Complete |
 | CONTENT-01 | Phase 3 | Pending |
 | CONTENT-02 | Phase 3 | Pending |
 | CONTENT-03 | Phase 3 | Pending |
