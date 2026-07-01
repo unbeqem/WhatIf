@@ -440,3 +440,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Claude Code local settings + installed agent skills (machine-specific / re-installable via `npx skills add`)
+.claude/settings.local.json
+.claude/skills/
+.agents/
+skills-lock.json
