@@ -1,31 +1,31 @@
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-execute-phase 2 — Plan 02-02 executed
+**Updated by:** gsd-execute-phase 2 — Plan 02-04 executed
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phase 2 Wave 1 (02-01) + Wave 2 Plan 02-02 complete. 02-03/02-04 remain.
+**Current focus:** Phase 2 Wave 1 (02-01) + Wave 2 Plans 02-02/02-04 complete. 02-03 remains.
 
 ## Current Position
 
 **Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (Wave 1 complete, Wave 2 in progress)
-**Plan:** 02-02 COMPLETE (1/1 task). Next: 02-03, 02-04 (Wave 2, parallelizable).
-**Status:** 02-02 executed — signature-verified `/api/stripe/webhook` (raw-body `constructEventAsync`), idempotent plan flip on checkout.session.completed/customer.subscription.updated/customer.subscription.deleted via the pure planForEvent reducer, demo-mode safe, PAY-04 confirmed already satisfied in lib/quota.ts. tsc clean, build green, no deviations. Next: continue `/gsd-execute-phase 2` for 02-03/02-04.
-**Progress:** 1/4 phases complete; Phase 2 in progress (2/4 plans done)
+**Plan:** 02-04 COMPLETE (2/2 tasks). Next: 02-03 (Wave 2, founder checkpoint).
+**Status:** 02-04 executed — vitest installed + wired via `npm test`; `lib/stripe.test.ts` covers `planFromSubscription`/`planForEvent` (amount→tier mapping, active/trialing entitlement, cancel_at_period_end-stays-Pro, canceled/unpaid/deleted→free, unhandled→null). 12/12 tests green, tsc clean, no network/DB in test file. One minor deviation: plan's literal `--reporter=basic` verify command isn't a valid vitest 4.1.9 reporter — substituted plain `npx vitest run` (documented in SUMMARY). Next: continue `/gsd-execute-phase 2` for 02-03.
+**Progress:** 1/4 phases complete; Phase 2 in progress (3/4 plans done)
 
 ```
-[████████░░░░░░░░░░░░] 33% (Phase 1 done · 16/29 v1 requirements delivered · Phase 2 Wave 2 in progress)
+[█████████░░░░░░░░░░░] 37% (Phase 1 done · 16/29 v1 requirements delivered · Phase 2 Wave 2 in progress)
 ```
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
 - 02-01 (Wave 1) — DONE. Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]. Commits: 801a7aa, f4eca5b, 408df6a, summary 9d6e578.
 - 02-02 (Wave 2) — DONE. `/api/stripe/webhook`: raw-body signature verify + idempotent plan flip on 3 events [PAY-02, PAY-03, PAY-04, PAY-05]. Commit: 0eac0b9.
 - 02-03 (Wave 2) — `/api/stripe/portal` + `/account` page + AuthNav link; founder verify checkpoint [PAY-06]
-- 02-04 (Wave 2) — vitest setup + pure reducer unit tests [PAY-03, PAY-05]
+- 02-04 (Wave 2) — DONE. vitest setup + pure reducer unit tests [PAY-03, PAY-05]. Commits: 1be0117, 4b84bd7.
 
 **Verify checklist (Plan 05 Task 3):**
 - [x] 1-4 Signup → email confirm → land on `/?confirmed=1` (W4 Set-Cookie ✓)
@@ -68,7 +68,7 @@
 | Requirements delivered | 16 |
 | Phases planned | 4 |
 | Phases complete | 1 |
-| Plans complete | 2 (02-01, 02-02) |
+| Plans complete | 3 (02-01, 02-02, 02-04) |
 
 ## Accumulated Context
 
@@ -93,7 +93,7 @@
 - Founder: apply migration `0003_phase2_billing.sql` via Supabase SQL editor or `supabase db push` (not applied by the executor per plan constraint).
 - Founder: run `stripe listen --forward-to localhost:3000/api/stripe/webhook` for `STRIPE_WEBHOOK_SECRET`, then exercise a real test-mode checkout (4242 card) + `stripe trigger customer.subscription.deleted` to E2E-verify Plan 02-02's webhook against a live Stripe test event.
 - Founder: save Customer Portal settings once in the Stripe test dashboard (needed by Plan 02-03).
-- Continue `/gsd-execute-phase 2` for remaining Wave 2 plans (02-03, 02-04).
+- Continue `/gsd-execute-phase 2` for remaining Wave 2 plan (02-03).
 
 ### Blockers
 
@@ -108,10 +108,10 @@
 ## Session Continuity
 
 ### Last action
-- Plan 02-02 executed: 1/1 task committed (0eac0b9), SUMMARY.md written + self-check PASSED. tsc clean, `npm run build` green. No deviations. PAY-02 marked complete in REQUIREMENTS.md; ROADMAP.md Phase 2 plan progress updated.
+- Plan 02-04 executed: 2/2 tasks committed (1be0117, 4b84bd7), SUMMARY.md written + self-check PASSED. `npm test` green (12/12), tsc clean. One documented deviation (plan's `--reporter=basic` verify one-liner isn't a valid vitest 4.1.9 reporter name — substituted `npx vitest run`; no functional impact). PAY-03/PAY-05 already marked complete in REQUIREMENTS.md from Plan 02-01/02-02; ROADMAP.md Phase 2 plan progress updated for 02-04.
 
 ### Next action
-- Continue `/gsd-execute-phase 2` for remaining Wave 2 plans: 02-03 (portal + account page, founder checkpoint), 02-04 (vitest unit tests).
+- Continue `/gsd-execute-phase 2` for remaining Wave 2 plan: 02-03 (portal + account page, founder checkpoint).
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions

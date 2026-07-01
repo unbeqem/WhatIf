@@ -61,7 +61,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   - [x] 02-01-PLAN.md — Migration 0003 + lib/stripe.ts core (pinned apiVersion, pure reducer, portal helper) + checkout wiring (PAY-01)
   - [x] 02-02-PLAN.md — /api/stripe/webhook: signature verify + idempotent plan flip on 3 events (PAY-02/03/05); confirms PAY-04
   - [ ] 02-03-PLAN.md — /api/stripe/portal + /account page + AuthNav link (PAY-06)
-  - [ ] 02-04-PLAN.md — vitest setup + pure reducer unit tests (PAY-03/05)
+  - [x] 02-04-PLAN.md — vitest setup + pure reducer unit tests (PAY-03/05)
 **UI hint**: yes
 
 ### Phase 3: Polish + New Features
