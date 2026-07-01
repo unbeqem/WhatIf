@@ -59,7 +59,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   5. A subscribed user can open the Stripe Customer Portal from their account to update payment method or cancel, without leaving the WhatIf brand context.
 **Plans**: 4 plans
   - [x] 02-01-PLAN.md — Migration 0003 + lib/stripe.ts core (pinned apiVersion, pure reducer, portal helper) + checkout wiring (PAY-01)
-  - [ ] 02-02-PLAN.md — /api/stripe/webhook: signature verify + idempotent plan flip on 3 events (PAY-02/03/05); confirms PAY-04
+  - [x] 02-02-PLAN.md — /api/stripe/webhook: signature verify + idempotent plan flip on 3 events (PAY-02/03/05); confirms PAY-04
   - [ ] 02-03-PLAN.md — /api/stripe/portal + /account page + AuthNav link (PAY-06)
   - [ ] 02-04-PLAN.md — vitest setup + pure reducer unit tests (PAY-03/05)
 **UI hint**: yes
@@ -95,7 +95,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Rate-Limiting + User-System | 0/? | Not started | — |
-| 2. Stripe Webhook + Pro-Unlock Flow | 1/4 | In Progress|  |
+| 2. Stripe Webhook + Pro-Unlock Flow | 2/4 | In Progress|  |
 | 3. Polish + New Features | 0/? | Not started | — |
 | 4. Live Deploy | 0/? | Not started | — |
 

@@ -1,29 +1,29 @@
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-execute-phase 2 — Plan 02-01 executed
+**Updated by:** gsd-execute-phase 2 — Plan 02-02 executed
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phase 2 Wave 1 (02-01) complete. Wave 2 (02-02/03/04) ready to execute in parallel.
+**Current focus:** Phase 2 Wave 1 (02-01) + Wave 2 Plan 02-02 complete. 02-03/02-04 remain.
 
 ## Current Position
 
-**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (Wave 1 complete, Wave 2 pending)
-**Plan:** 02-01 COMPLETE (3/3 tasks). Next: 02-02, 02-03, 02-04 (Wave 2, parallelizable).
-**Status:** 02-01 executed — pinned+exported Stripe instance, pure planFromSubscription/planForEvent reducers, createPortalSession, checkout wired to logged-in user, migration 0003 + db.types. tsc clean, build green, no deviations. Next: continue `/gsd-execute-phase 2` for Wave 2.
-**Progress:** 1/4 phases complete; Phase 2 in progress (1/4 plans done)
+**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (Wave 1 complete, Wave 2 in progress)
+**Plan:** 02-02 COMPLETE (1/1 task). Next: 02-03, 02-04 (Wave 2, parallelizable).
+**Status:** 02-02 executed — signature-verified `/api/stripe/webhook` (raw-body `constructEventAsync`), idempotent plan flip on checkout.session.completed/customer.subscription.updated/customer.subscription.deleted via the pure planForEvent reducer, demo-mode safe, PAY-04 confirmed already satisfied in lib/quota.ts. tsc clean, build green, no deviations. Next: continue `/gsd-execute-phase 2` for 02-03/02-04.
+**Progress:** 1/4 phases complete; Phase 2 in progress (2/4 plans done)
 
 ```
-[███████░░░░░░░░░░░░░] 30% (Phase 1 done · 15/29 v1 requirements delivered · Phase 2 Wave 1 done)
+[████████░░░░░░░░░░░░] 33% (Phase 1 done · 16/29 v1 requirements delivered · Phase 2 Wave 2 in progress)
 ```
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
 - 02-01 (Wave 1) — DONE. Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]. Commits: 801a7aa, f4eca5b, 408df6a, summary 9d6e578.
-- 02-02 (Wave 2) — `/api/stripe/webhook`: raw-body signature verify + idempotent plan flip on 3 events [PAY-02, PAY-03, PAY-04, PAY-05]
+- 02-02 (Wave 2) — DONE. `/api/stripe/webhook`: raw-body signature verify + idempotent plan flip on 3 events [PAY-02, PAY-03, PAY-04, PAY-05]. Commit: 0eac0b9.
 - 02-03 (Wave 2) — `/api/stripe/portal` + `/account` page + AuthNav link; founder verify checkpoint [PAY-06]
 - 02-04 (Wave 2) — vitest setup + pure reducer unit tests [PAY-03, PAY-05]
 
@@ -65,10 +65,10 @@
 | Metric | Value |
 |--------|-------|
 | v1 requirements total | 29 |
-| Requirements delivered | 15 |
+| Requirements delivered | 16 |
 | Phases planned | 4 |
 | Phases complete | 1 |
-| Plans complete | 1 (02-01) |
+| Plans complete | 2 (02-01, 02-02) |
 
 ## Accumulated Context
 
@@ -91,9 +91,9 @@
 ### Todos
 
 - Founder: apply migration `0003_phase2_billing.sql` via Supabase SQL editor or `supabase db push` (not applied by the executor per plan constraint).
-- Founder: run `stripe listen --forward-to localhost:3000/api/stripe/webhook` for `STRIPE_WEBHOOK_SECRET` (needed by Plan 02-02).
+- Founder: run `stripe listen --forward-to localhost:3000/api/stripe/webhook` for `STRIPE_WEBHOOK_SECRET`, then exercise a real test-mode checkout (4242 card) + `stripe trigger customer.subscription.deleted` to E2E-verify Plan 02-02's webhook against a live Stripe test event.
 - Founder: save Customer Portal settings once in the Stripe test dashboard (needed by Plan 02-03).
-- Continue `/gsd-execute-phase 2` for Wave 2 (02-02, 02-03, 02-04).
+- Continue `/gsd-execute-phase 2` for remaining Wave 2 plans (02-03, 02-04).
 
 ### Blockers
 
@@ -108,10 +108,10 @@
 ## Session Continuity
 
 ### Last action
-- Plan 02-01 executed: 3/3 tasks committed (801a7aa, f4eca5b, 408df6a), SUMMARY.md written + self-check PASSED (9d6e578). tsc clean, `npm run build` green. No deviations.
+- Plan 02-02 executed: 1/1 task committed (0eac0b9), SUMMARY.md written + self-check PASSED. tsc clean, `npm run build` green. No deviations. PAY-02 marked complete in REQUIREMENTS.md; ROADMAP.md Phase 2 plan progress updated.
 
 ### Next action
-- Continue `/gsd-execute-phase 2` for Wave 2: Plan 02-02 (webhook route), 02-03 (portal + account page, founder checkpoint), 02-04 (vitest unit tests) — run in parallel per ROADMAP wave plan.
+- Continue `/gsd-execute-phase 2` for remaining Wave 2 plans: 02-03 (portal + account page, founder checkpoint), 02-04 (vitest unit tests).
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions
