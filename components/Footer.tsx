@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex items-center gap-6">
           <a href="#" className="transition-colors hover:text-fg">Privacy</a>
           <a href="#" className="transition-colors hover:text-fg">Terms</a>
-          <a href="mailto:hello@whatif.app" className="transition-colors hover:text-fg">Contact</a>
+          <a href="mailto:business@what-if.tech" className="transition-colors hover:text-fg">Contact</a>
         </div>
       </div>
     </footer>

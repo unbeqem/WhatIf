@@ -189,7 +189,7 @@ export default function StoryCard({ input, result }: Props) {
           color: "#c9c6e6",
         }}
       >
-        whatif.app — simulate your decision
+        what-if.tech — simulate your decision
       </div>
     </div>
   );

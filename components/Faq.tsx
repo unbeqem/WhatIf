@@ -22,8 +22,8 @@ const ITEMS = [
     a: (
       <>
         We're an EU-based operation and GDPR-compliant. Email data requests (access, deletion) to{" "}
-        <a href="mailto:hello@whatif.app" className="text-violet-glow underline underline-offset-2 hover:text-fg">
-          hello@whatif.app
+        <a href="mailto:business@what-if.tech" className="text-violet-glow underline underline-offset-2 hover:text-fg">
+          business@what-if.tech
         </a>{" "}
         and we'll action them.
       </>
