@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import AuthNav from "@/components/AuthNav";
+import { useMe } from "@/lib/useMe";
 
 const LINKS = [
   { href: "/#how-it-works", label: "How it works" },
@@ -13,8 +14,11 @@ const LINKS = [
 
 export default function Nav() {
   const pathname = usePathname();
+  const me = useMe();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const ctaLabel = me?.authenticated ? "New simulation" : "Try free";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -54,12 +58,12 @@ export default function Nav() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <AuthNav />
+          <AuthNav me={me} />
           <Link
             href="/decision"
             className="group inline-flex items-center gap-1.5 rounded-full border border-border-hi bg-surface/60 px-4 py-2 text-sm font-medium text-fg backdrop-blur-sm transition-all hover:border-violet-glow/60 hover:bg-surface-hi"
           >
-            Try free
+            {ctaLabel}
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
 
@@ -110,7 +114,7 @@ export default function Nav() {
             href="/decision"
             className="mt-1 inline-flex items-center justify-between rounded-lg bg-gradient-to-br from-violet to-magenta px-3 py-2.5 font-medium text-white"
           >
-            Try free <span>→</span>
+            {ctaLabel} <span>→</span>
           </Link>
         </nav>
       </div>

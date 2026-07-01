@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import UpgradeButton from "@/components/UpgradeButton";
+import { useMe, isSubscriberPlan } from "@/lib/useMe";
 import type { SimulationResult, Scenario } from "@/lib/types";
 
 type Stored = { input: string; result: SimulationResult; ts: number };
@@ -36,6 +37,10 @@ function styleFor(tag: string) {
 export default function ResultView() {
   const [data, setData] = useState<Stored | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const me = useMe();
+  // Show the upsell only once we know the viewer is NOT a subscriber, so Pro/Creator
+  // users never flash the "Unlock Pro" block. While loading (me undefined) it stays hidden.
+  const showUpsell = me !== undefined && !isSubscriberPlan(me.plan);
 
   useEffect(() => {
     setHydrated(true);
@@ -149,8 +154,8 @@ export default function ResultView() {
         </div>
       </motion.div>
 
-      {/* Paywall + actions */}
-      <div className="grid gap-4 md:grid-cols-3">
+      {/* Actions (+ upsell for non-subscribers) */}
+      <div className={showUpsell ? "grid gap-4 md:grid-cols-3" : "grid gap-4"}>
         <Link
           href="/decision"
           className="group inline-flex items-center justify-between rounded-2xl border border-border bg-surface/40 p-5 transition-colors hover:border-border-hi hover:bg-surface-hi"
@@ -166,30 +171,32 @@ export default function ResultView() {
           </span>
         </Link>
 
-        <div className="relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5 md:col-span-2">
-          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-violet-glow">
-            Soft paywall
-          </div>
-          <div className="mt-1 font-display text-xl leading-tight">
-            Want to see the version of this answer{" "}
-            <span className="italic text-fg-soft">we held back</span>?
-          </div>
-          <p className="mt-2 text-sm text-fg-soft">
-            Pro unlocks the deeper second-order effects, the kill-switch metric, and history of
-            every decision you've simulated.
-          </p>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="flex-1">
-              <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
+        {showUpsell && (
+          <div className="relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5 md:col-span-2">
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-violet-glow">
+              Soft paywall
             </div>
-            <Link
-              href="/#pricing"
-              className="inline-flex items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-3 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
-            >
-              Compare plans
-            </Link>
+            <div className="mt-1 font-display text-xl leading-tight">
+              Want to see the version of this answer{" "}
+              <span className="italic text-fg-soft">we held back</span>?
+            </div>
+            <p className="mt-2 text-sm text-fg-soft">
+              Pro unlocks the deeper second-order effects, the kill-switch metric, and history of
+              every decision you've simulated.
+            </p>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div className="flex-1">
+                <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
+              </div>
+              <Link
+                href="/#pricing"
+                className="inline-flex items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-3 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
+              >
+                Compare plans
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

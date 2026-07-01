@@ -1,41 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  createSupabaseBrowserClient,
-  isSupabaseConfigured,
-} from "@/lib/supabase/client";
+import { type Me } from "@/lib/useMe";
 
-export default function AuthNav() {
-  const [email, setEmail] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(false);
+const PLAN_LABEL: Record<string, string> = { pro: "Pro", creator: "Creator" };
 
-  useEffect(() => {
-    if (!isSupabaseConfigured) {
-      setHydrated(true);
-      return;
-    }
-    const supabase = createSupabaseBrowserClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setEmail(data.user?.email ?? null);
-      setHydrated(true);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_evt, session) => {
-      setEmail(session?.user?.email ?? null);
-    });
-    return () => sub.subscription.unsubscribe();
-  }, []);
+export default function AuthNav({ me }: { me: Me | undefined }) {
+  if (me === undefined) return null; // loading
+  if (!me.configured) return null; // demo mode — no auth surface
 
-  async function logout() {
-    await fetch("/auth/logout", { method: "POST" });
-    window.location.reload();
-  }
-
-  if (!hydrated) return null;
-  if (!isSupabaseConfigured) return null;
-
-  if (!email) {
+  if (!me.authenticated || !me.email) {
     return (
       <Link
         href="/login"
@@ -46,7 +20,14 @@ export default function AuthNav() {
     );
   }
 
+  const email = me.email;
   const short = email.length > 22 ? email.slice(0, 20) + "…" : email;
+  const planLabel = me.plan ? PLAN_LABEL[me.plan] : undefined;
+
+  async function logout() {
+    await fetch("/auth/logout", { method: "POST" });
+    window.location.reload();
+  }
 
   return (
     <div className="hidden sm:flex items-center gap-2">
@@ -57,6 +38,11 @@ export default function AuthNav() {
       >
         <span className="h-1.5 w-1.5 rounded-full bg-violet-glow shadow-[0_0_6px_rgba(192,132,252,0.7)]" />
         {short}
+        {planLabel && (
+          <span className="ml-1 rounded-full border border-violet-glow/50 bg-violet/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-violet-glow">
+            {planLabel}
+          </span>
+        )}
       </Link>
       <button
         type="button"
