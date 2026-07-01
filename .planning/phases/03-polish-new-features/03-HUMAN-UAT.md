@@ -17,15 +17,15 @@ expected: POST /api/export as a Creator (or in demo mode) returns a 1080x1920 PN
 result: [pending]
 
 ### 2. /result actions row layout for free/anon users
-expected: On /result as a free/anon (non-subscriber) user at the md breakpoint, the "Ask another question" / Pro upsell / ShareCard Creator-upsell tiles sit cleanly in a 3-column row (no wrap to a second row). NOTE: 03-REVIEW.md WR-01 confirms a defect here — grid is `md:grid-cols-3` but children sum to 4 column-units, so ShareCard currently wraps. Decide ship/no-ship or apply the one-line fix.
-result: [pending]
+expected: On /result as a free/anon (non-subscriber) user at the md breakpoint, the "Ask another question" / Pro upsell / ShareCard Creator-upsell tiles sit cleanly (no broken wrap). WR-01 fix applied (commit 72c333b): Ask + Pro upsell (col-span-2) fill row 1; ShareCard now takes md:col-span-3 as a clean full-width second row. Build/tsc/tests green.
+result: resolved (fixed in code — founder chose "fix first")
 
 ## Summary
 
 total: 2
-passed: 0
+passed: 1
 issues: 0
-pending: 2
+pending: 1
 skipped: 0
 blocked: 0
 

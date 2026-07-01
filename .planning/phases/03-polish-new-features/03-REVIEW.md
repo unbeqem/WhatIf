@@ -32,6 +32,12 @@ status: issues_found
 **Files Reviewed:** 13
 **Status:** issues_found
 
+## Resolution (post-review, founder chose "fix first")
+
+- **CR-01 — FIXED** (commit `93645ad`): `/api/export` now validates full payload shape via the pure `isValidExportPayload` in `lib/export-gate.ts` (rejects non-object scenarios and non-finite `probability` → 400), wraps font-read + `ImageResponse` in try/catch (500 JSON instead of unhandled throw — also covers WR-05's missing-font case), and `StoryCard` clamps `probability` to a finite number. 8 new unit tests added (`tests/export-gate.test.ts`), suite 29/29 green.
+- **WR-01 — FIXED** (commit `72c333b`): `/result` actions grid corrected — `ShareCard` takes `md:col-span-3` in the free/anon case (clean full-width second row); subscriber 2-col layout unchanged.
+- **WR-02, WR-03, WR-04, IN-01..05 — OPEN (tracked):** deferred by founder decision; not blocking. WR-02 (402 branch reachability) is a design/intent question; WR-03 (`useMe` failure → paywall) and WR-04 (string length bounds) are hardening items for a later pass.
+
 ## Summary
 
 Phase 3 adds a Creator-only story-card export (`/api/export` + `StoryCard` for Satori rendering), the `ShareCard` client flow with 402 handling, plus landing polish (`Testimonials`, `Faq`, `Nav`, honest counter) and a pure gating helper (`lib/export-gate.ts`) with unit tests.

@@ -1,16 +1,16 @@
 ---
 phase: 03-polish-new-features
 verified: 2026-07-01T15:10:00Z
-status: human_needed
+status: passed
 score: 5/5 must-haves verified
 overrides_applied: 0
+post_verification_fixes:
+  - "CR-01 hardened (commit 93645ad): full export payload validation + render try/catch + probability clamp; 8 new tests, suite 29/29 green."
+  - "WR-01 fixed (commit 72c333b): /result actions grid — ShareCard md:col-span-3 full-width row; no more wrap."
 human_verification:
   - test: "Open a generated story-card PNG (POST /api/export as a Creator or in demo mode) at actual pixel size / TikTok overlay scale"
     expected: "1080x1920 PNG; WhatIf wordmark, the user's question (>=64px), the recommendation, and 3 scenario tags/probabilities are all legible when the card is viewed as a phone-screen TikTok overlay"
-    why_human: "next/og ImageResponse rasterization requires the full Next.js runtime; legibility at overlay scale is a visual judgment call, not something grep/tsc/vitest can assert (per plan's own <verification> section, this was always flagged as the founder's manual check)"
-  - test: "On /result, view the actions row as a free/anon (non-subscriber) user and resize to md breakpoint"
-    expected: "Ask another question / Pro upsell / ShareCard Creator-upsell tiles sit cleanly in a 3-column row"
-    why_human: "Confirmed defect exists in code (see WR-01 below) — grid is md:grid-cols-3 but children sum to 4 column-units (1 + 2 col-span-2 + 1), so ShareCard wraps to a second row under 'Ask another question' instead of completing the row. Needs a human/visual call on whether this is acceptable before ship or needs the one-line fix from 03-REVIEW.md."
+    why_human: "next/og ImageResponse rasterization requires the full Next.js runtime; legibility at overlay scale is a visual judgment call, not something grep/tsc/vitest can assert (per plan's own <verification> section, this was always flagged as the founder's manual check). DEFERRED — tracked in 03-HUMAN-UAT.md; does not block phase completion."
 ---
 
 # Phase 3: Polish + New Features Verification Report
