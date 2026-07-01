@@ -1,28 +1,28 @@
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-plan-phase 2 — Phase 1 closed, Phase 2 planned
+**Updated by:** gsd-execute-phase 2 — Plan 02-01 executed
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phase 1 complete + verified. Phase 2 planned — ready to execute.
+**Current focus:** Phase 2 Wave 1 (02-01) complete. Wave 2 (02-02/03/04) ready to execute in parallel.
 
 ## Current Position
 
-**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (planned, ready to execute)
-**Plan:** Phase 1 COMPLETE (21/21 verified). Phase 2 planned: 4 plans in 2 waves.
-**Status:** Phase 2 planning complete + checker-verified. 3 warnings fixed (commit 7c94487); 1 blocker (missing VALIDATION.md) waived at orchestrator level — validation architecture is folded into 02-RESEARCH.md and implemented by Plan 02-04, consistent with Phase 1. Next: `/gsd-execute-phase 2`.
-**Progress:** 1/4 phases complete
+**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (Wave 1 complete, Wave 2 pending)
+**Plan:** 02-01 COMPLETE (3/3 tasks). Next: 02-02, 02-03, 02-04 (Wave 2, parallelizable).
+**Status:** 02-01 executed — pinned+exported Stripe instance, pure planFromSubscription/planForEvent reducers, createPortalSession, checkout wired to logged-in user, migration 0003 + db.types. tsc clean, build green, no deviations. Next: continue `/gsd-execute-phase 2` for Wave 2.
+**Progress:** 1/4 phases complete; Phase 2 in progress (1/4 plans done)
 
 ```
-[██████░░░░░░░░░░░░░░] 25% (Phase 1 done · 12/29 v1 requirements delivered · Phase 2 planned)
+[███████░░░░░░░░░░░░░] 30% (Phase 1 done · 15/29 v1 requirements delivered · Phase 2 Wave 1 done)
 ```
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
-- 02-01 (Wave 1) — Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]
+- 02-01 (Wave 1) — DONE. Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]. Commits: 801a7aa, f4eca5b, 408df6a, summary 9d6e578.
 - 02-02 (Wave 2) — `/api/stripe/webhook`: raw-body signature verify + idempotent plan flip on 3 events [PAY-02, PAY-03, PAY-04, PAY-05]
 - 02-03 (Wave 2) — `/api/stripe/portal` + `/account` page + AuthNav link; founder verify checkpoint [PAY-06]
 - 02-04 (Wave 2) — vitest setup + pure reducer unit tests [PAY-03, PAY-05]
@@ -65,10 +65,10 @@
 | Metric | Value |
 |--------|-------|
 | v1 requirements total | 29 |
-| Requirements delivered | 0 |
+| Requirements delivered | 15 |
 | Phases planned | 4 |
-| Phases complete | 0 |
-| Plans complete | 0 |
+| Phases complete | 1 |
+| Plans complete | 1 (02-01) |
 
 ## Accumulated Context
 
@@ -90,8 +90,10 @@
 
 ### Todos
 
-- Founder: provision Supabase (EU) + Upstash, run migration, fill `.env.local`, walk the 21-step verification in Plan 05 Task 3.
-- After Task 3 approval: `/gsd-plan-phase 2` (Stripe Webhook + Pro-Unlock).
+- Founder: apply migration `0003_phase2_billing.sql` via Supabase SQL editor or `supabase db push` (not applied by the executor per plan constraint).
+- Founder: run `stripe listen --forward-to localhost:3000/api/stripe/webhook` for `STRIPE_WEBHOOK_SECRET` (needed by Plan 02-02).
+- Founder: save Customer Portal settings once in the Stripe test dashboard (needed by Plan 02-03).
+- Continue `/gsd-execute-phase 2` for Wave 2 (02-02, 02-03, 02-04).
 
 ### Blockers
 
@@ -106,10 +108,10 @@
 ## Session Continuity
 
 ### Last action
-- Phase 1 code shipped across 5 commits + 1 MVP fix. tsc clean, next build clean. Plan 05 Task 3 (blocking human-verify checkpoint) reached — execution paused for founder setup.
+- Plan 02-01 executed: 3/3 tasks committed (801a7aa, f4eca5b, 408df6a), SUMMARY.md written + self-check PASSED (9d6e578). tsc clean, `npm run build` green. No deviations.
 
 ### Next action
-- Phase 2 planned + checker-verified (4 plans, 2 waves). Run `/gsd-execute-phase 2`. Founder prep: Stripe test products/prices, `stripe listen` for STRIPE_WEBHOOK_SECRET, and save test-mode Customer Portal settings.
+- Continue `/gsd-execute-phase 2` for Wave 2: Plan 02-02 (webhook route), 02-03 (portal + account page, founder checkpoint), 02-04 (vitest unit tests) — run in parallel per ROADMAP wave plan.
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions

@@ -30,11 +30,11 @@ Production-launch requirements. Each maps to one phase in `ROADMAP.md`.
 
 ### Payments (PAY)
 
-- [ ] **PAY-01**: Stripe checkout opens for Pro (€5/mo) and Creator (€9/mo) with logged-in user's email pre-filled
+- [x] **PAY-01**: Stripe checkout opens for Pro (€5/mo) and Creator (€9/mo) with logged-in user's email pre-filled
 - [ ] **PAY-02**: Stripe webhook (`/api/stripe/webhook`) verifies signature and processes `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
-- [ ] **PAY-03**: A user with an active Pro/Creator subscription has `plan = 'pro' | 'creator'` in DB; otherwise `'free'`
+- [x] **PAY-03**: A user with an active Pro/Creator subscription has `plan = 'pro' | 'creator'` in DB; otherwise `'free'`
 - [ ] **PAY-04**: `/api/simulate` reads the plan and bypasses the free-tier limit for Pro/Creator
-- [ ] **PAY-05**: When a subscription is canceled or fails, the user is downgraded to Free at period end (Stripe handles the date)
+- [x] **PAY-05**: When a subscription is canceled or fails, the user is downgraded to Free at period end (Stripe handles the date)
 - [ ] **PAY-06**: User can open Stripe Customer Portal from their account to manage / cancel subscription
 
 ### Content (CONTENT)
@@ -113,11 +113,11 @@ Mapped to phases during roadmap creation. Updated by `gsd-roadmapper`.
 | ABUSE-01 | Phase 1 | Pending |
 | ABUSE-02 | Phase 1 | Pending |
 | ABUSE-03 | Phase 1 | Pending |
-| PAY-01 | Phase 2 | Pending |
+| PAY-01 | Phase 2 | Complete |
 | PAY-02 | Phase 2 | Pending |
-| PAY-03 | Phase 2 | Pending |
+| PAY-03 | Phase 2 | Complete |
 | PAY-04 | Phase 2 | Pending |
-| PAY-05 | Phase 2 | Pending |
+| PAY-05 | Phase 2 | Complete |
 | PAY-06 | Phase 2 | Pending |
 | CONTENT-01 | Phase 3 | Pending |
 | CONTENT-02 | Phase 3 | Pending |
