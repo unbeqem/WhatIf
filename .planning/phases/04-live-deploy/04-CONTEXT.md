@@ -32,8 +32,8 @@ Get WhatIf **publicly deployed and production-configured** on Vercel: real OpenA
 ## Implementation Decisions
 
 ### Domain / deploy target
-- **D-01:** Deploy NOW to a free Vercel `*.vercel.app` subdomain. Do not block on a registered domain. Real domain gets mapped later (DNS + Supabase Site URL + Stripe/Resend redirect URLs) with no rebuild.
-- **D-02:** All URL-dependent config (Supabase redirect/Site URL, Stripe checkout success/cancel URLs, Resend sender links, any hardcoded `whatif.app` copy that is functional vs cosmetic) must read from an env-driven base URL (e.g. `NEXT_PUBLIC_SITE_URL`) so the later domain swap is one env change. Cosmetic "whatif.app" text in the story card / footer can stay.
+- **D-01:** UPDATE (2026-07-01): the founder already registered a real domain **`what-if.tech`** and mapped it to Vercel — the site is live there. The `*.vercel.app`-first fallback is moot; production URL is `https://what-if.tech`. (Original decision was deploy-now-on-vercel.app; superseded by the real domain being ready.)
+- **D-02:** All URL-dependent config already routes through the existing env var **`NEXT_PUBLIC_URL`** (used in lib/stripe.ts checkout success/cancel + portal return, and auth signup/reset email redirect base). Set `NEXT_PUBLIC_URL=https://what-if.tech` (NO trailing slash — code concatenates `${baseUrl}/path`). Cosmetic "whatif.app" text in the story card / footer copy is separate and can be updated to what-if.tech as a nicety (not functional).
 
 ### Supabase production
 - **D-03:** Reuse the existing EU Supabase project `zdirwmqfoynxmfifzlvt` as production. Migrations 0001–0003 are already applied there. No separate prod project for a hobby-stage app.
@@ -119,7 +119,7 @@ No external ADRs/specs — requirements fully captured in decisions above.
 ## Deferred Ideas
 
 - **Go-live-payments step (post-Gewerbe):** swap Stripe test→live keys, create live products/prices, register the live webhook endpoint, run one real paid simulation. This is the original DEPLOY-02 (live half) + DEPLOY-04 (paid simulation).
-- **Custom domain:** register the WhatIf product domain, map DNS to Vercel, update Supabase Site URL + Stripe/Resend redirect URLs. (co-orga is the employer, not the domain owner.)
+- **Custom domain:** ~~register the WhatIf product domain, map DNS to Vercel~~ — DONE: `what-if.tech` is registered and live on Vercel. Remaining URL wiring (Supabase Site URL, Stripe webhook, `NEXT_PUBLIC_URL`) is part of this phase's env setup, not deferred.
 - **Full AGB + Widerrufsbelehrung:** required once real payments are accepted.
 - **Nebentätigkeit check:** confirm the employment contract (co-orga) allows the side business before registering the Nebengewerbe. Founder-side, non-code.
 
