@@ -50,13 +50,14 @@ export default function AuthNav() {
 
   return (
     <div className="hidden sm:flex items-center gap-2">
-      <span
+      <Link
+        href="/account"
         title={email}
-        className="inline-flex items-center gap-2 rounded-full border border-border-hi bg-surface/60 px-4 py-2 text-sm font-medium text-fg-soft backdrop-blur-sm"
+        className="inline-flex items-center gap-2 rounded-full border border-border-hi bg-surface/60 px-4 py-2 text-sm font-medium text-fg-soft backdrop-blur-sm transition-all hover:border-violet-glow/60 hover:bg-surface-hi hover:text-fg"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-violet-glow shadow-[0_0_6px_rgba(192,132,252,0.7)]" />
         {short}
-      </span>
+      </Link>
       <button
         type="button"
         onClick={logout}
