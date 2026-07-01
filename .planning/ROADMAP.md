@@ -75,8 +75,8 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   4. A Creator-tier user on `/result` can click "Download story card" and receive a 9:16 PNG branded with the WhatIf logo and their original question, readable at TikTok overlay scale.
   5. The export endpoint returns HTTP 402 with an upsell payload for free and Pro users (not silent failure).
 **Plans**: 2 plans (2 waves collapse to 1 — disjoint file ownership, fully parallel)
-  - [ ] 03-01-PLAN.md — Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result (CONTENT-04, EXPORT-01/02/03)
-  - [ ] 03-02-PLAN.md — Landing conversion: FAQ accordion + testimonials/scroll counter + FAQ nav link + 8 rewritten example prompts (CONTENT-01/02/03)
+  - [x] 03-01-PLAN.md — Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result (CONTENT-04, EXPORT-01/02/03)
+  - [x] 03-02-PLAN.md — Landing conversion: FAQ accordion + testimonials/scroll counter + FAQ nav link + 8 rewritten example prompts (CONTENT-01/02/03)
 **UI hint**: yes
 
 ### Phase 4: Live Deploy
