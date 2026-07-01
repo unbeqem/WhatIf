@@ -1,31 +1,32 @@
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-execute-phase 2 — Plan 02-03 code executed, founder E2E checkpoint pending
+**Updated by:** gsd-execute-phase 2 — Phase 2 COMPLETE (E2E verified, 6/6 PAY)
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phase 2 code-complete (all 4 plans). Founder E2E checkpoint for 02-03 (Customer Portal) is the only remaining gate before Phase 2 is verified.
+**Current focus:** Phases 1 + 2 complete and verified. Next: Phase 3 (Polish + New Features) — `/gsd-plan-phase 3`.
 
 ## Current Position
 
-**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow (all plans code-complete; founder E2E verification pending)
-**Plan:** 02-03 CODE COMPLETE (2/2 auto tasks). Task 3 (founder checkpoint: human-verify) awaiting founder action — see Todos.
-**Status:** 02-03 executed — `/api/stripe/portal` (authenticated, IDOR-safe, demo-safe), `/account` server page (email + plan + subscriber/free branch), colocated `ManageSubscriptionButton` client module, AuthNav `/account` link. tsc clean, `npm run build` green, all acceptance-criteria greps passed on first attempt, zero deviations. Phase 2 is now code-complete end-to-end (02-01/02/03/04 all done); the founder must still complete the Stripe test-dashboard Customer Portal save + the full E2E pay→portal→cancel walk before Phase 2 can be marked verified.
-**Progress:** 1/4 phases complete; Phase 2 code-complete, founder E2E pending (4/4 plans code-done)
+**Phase:** 2 — Stripe Webhook + Pro-Unlock Flow — ✅ COMPLETE (founder E2E verified 2026-07-01)
+**Plan:** All 4 plans done + gap-closure 02-05. Founder E2E walk passed: checkout → plan flip → paywall bypass → portal opens → cancel-at-period-end (correctly retains Pro until period end).
+**Status:** All 6 PAY criteria verified live. PAY-05 confirmed via cancel-at-period-end semantics (subscription active until period end → status-based entitlement keeps Pro; `.deleted → free` path unit-tested in 02-04). Gap-closure 02-05 added plan-aware UI (nav CTA + plan badge + result upsell hidden for subscribers) after the founder caught stale UI at the checkpoint.
+**Progress:** 2/4 phases complete
 
 ```
-[███████████░░░░░░░░░] 41% (Phase 1 done · 17/29 v1 requirements delivered · Phase 2 code-complete, founder E2E pending)
+[██████████░░░░░░░░░░] 50% (Phases 1+2 done · 21/29 v1 requirements delivered)
 ```
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
 - 02-01 (Wave 1) — DONE. Foundation: migration 0003 (`stripe_subscription_id`) + db.types, `lib/stripe.ts` refactor (pinned apiVersion, pure reducer, portal helper), checkout wiring [PAY-01, PAY-03, PAY-05]. Commits: 801a7aa, f4eca5b, 408df6a, summary 9d6e578.
 - 02-02 (Wave 2) — DONE. `/api/stripe/webhook`: raw-body signature verify + idempotent plan flip on 3 events [PAY-02, PAY-03, PAY-04, PAY-05]. Commit: 0eac0b9.
-- 02-03 (Wave 2) — CODE COMPLETE. `/api/stripe/portal` + `/account` page + ManageSubscriptionButton + AuthNav link [PAY-06]. Commits: 72cdda4, 0f4e7e6. Founder E2E checkpoint pending (Stripe test-dashboard Customer Portal save + live pay→portal→cancel walk).
+- 02-03 (Wave 2) — DONE + E2E verified. `/api/stripe/portal` + `/account` page + ManageSubscriptionButton + AuthNav link [PAY-06]. Commits: 72cdda4, 0f4e7e6. Founder confirmed portal opens + cancel flow.
 - 02-04 (Wave 2) — DONE. vitest setup + pure reducer unit tests [PAY-03, PAY-05]. Commits: 1be0117, 4b84bd7.
+- 02-05 (gap-closure) — DONE. Plan-aware UI: GET /api/me + useMe() hook; AuthNav plan badge; Nav CTA "Try free"→"New simulation" for authed users; ResultView hides Unlock-Pro upsell for subscribers. Commit: eb5fc20. (Founder-caught gap at E2E checkpoint: plan flipped server-side but client UI was stale.)
 
 **Verify checklist (Plan 05 Task 3):**
 - [x] 1-4 Signup → email confirm → land on `/?confirmed=1` (W4 Set-Cookie ✓)
@@ -65,10 +66,10 @@
 | Metric | Value |
 |--------|-------|
 | v1 requirements total | 29 |
-| Requirements delivered | 17 |
+| Requirements delivered | 21 |
 | Phases planned | 4 |
-| Phases complete | 1 (Phase 2 code-complete, founder E2E pending) |
-| Plans complete | 4 (02-01, 02-02, 02-03, 02-04) |
+| Phases complete | 2 |
+| Plans complete | 9 (Phase 1: 5, Phase 2: 4) + 1 gap-closure (02-05) |
 
 ## Accumulated Context
 
@@ -90,12 +91,10 @@
 
 ### Todos
 
-- Founder: create Stripe test-mode products/prices (€5 Pro, €9 Creator).
-- Founder: apply migration `0003_phase2_billing.sql` via Supabase SQL editor or `supabase db push` (not applied by the executor per plan constraint).
-- Founder: run `stripe listen --forward-to localhost:3000/api/stripe/webhook` for `STRIPE_WEBHOOK_SECRET`; add a test-mode `STRIPE_SECRET_KEY` to `.env.local`.
-- Founder: save Customer Portal settings once in the Stripe test dashboard (Settings → Billing → Customer portal → Save) — hard prerequisite, the portal will not open without this.
-- Founder E2E walk (Phase 2 verification gate): sign in → `/account` → Unlock → complete a test-mode payment (4242 card) → confirm plan flips to pro/creator → click "Manage subscription" → confirm the Stripe-hosted Customer Portal opens and returns to `/account` → `stripe trigger customer.subscription.deleted` → confirm the profile downgrades to `free`.
-- Once the founder confirms the E2E walk, mark Phase 2 fully verified in ROADMAP.md/STATE.md (currently marked code-complete only).
+- Next: `/gsd-plan-phase 3` (Polish + New Features — FAQ, testimonials, example prompts, Creator 9:16 story-card export).
+- Housekeeping: `.agents/`, `.claude/`, `skills-lock.json` (from `npx skills add`) are untracked — decide gitignore vs commit.
+- Phase 4 backlog: register the WhatIf product domain; prod Stripe live keys + register the production webhook endpoint (local dev used `stripe listen`).
+- Phase 2 setup done by founder: migration 0003 applied; Stripe test `sk_test_`/`whsec_` in `.env.local`; Customer Portal settings saved.
 
 ### Blockers
 
@@ -110,10 +109,10 @@
 ## Session Continuity
 
 ### Last action
-- Plan 02-03 executed: 2/2 auto tasks committed (72cdda4 portal route, 0f4e7e6 /account page + ManageSubscriptionButton + AuthNav link), SUMMARY.md written + self-check PASSED. `npx tsc --noEmit` clean and `npm run build` green after each task. Zero deviations — all acceptance-criteria grep checks passed first attempt. `app/account/page.tsx` confirmed server-only (zero `"use client"`); `app/account/ManageSubscriptionButton.tsx` confirmed client-only (exactly one `"use client"`, first line). PAY-06 marked complete in REQUIREMENTS.md. ROADMAP.md Phase 2 plan progress updated to 4/4 but phase-level checkbox and Progress table intentionally left at "code complete, founder E2E pending" (not "Complete") since Task 3 (founder checkpoint) has not been confirmed.
+- Phase 2 fully verified via founder E2E: checkout with prefilled email → webhook flipped plan to pro → simulate bypassed the free cap → Customer Portal opened from `/account` → cancel-at-period-end correctly retained Pro (status active until period end; DB + Stripe cross-checked live). Gap-closure 02-05 (plan-aware UI: /api/me + useMe, nav badge, CTA, hidden result upsell) committed eb5fc20 after the founder caught stale UI at the checkpoint. ROADMAP + STATE marked Phase 1 and Phase 2 complete.
 
 ### Next action
-- Founder must complete the E2E checkpoint for Plan 02-03 (see Todos above: Stripe test-dashboard portal-settings save, migration 0003 apply, live pay → portal → cancel walk). Once confirmed, flip Phase 2 to fully verified in ROADMAP.md/STATE.md and proceed to `/gsd-plan-phase 3`.
+- `/gsd-plan-phase 3` — Polish + New Features (FAQ, testimonials, example prompts, Creator-tier 9:16 story-card export). Depends on Phase 2's `plan` field for the Creator export gate.
 
 ### Files of record
 - `.planning/PROJECT.md` — vision, constraints, key decisions
