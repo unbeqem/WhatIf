@@ -22,23 +22,23 @@ A user must be able to type a decision, get a sober three-future simulation in s
 - ✓ Landing → /decision → /result happy path with neon-glow UI — v0 (today)
 - ✓ Stripe checkout API route with demo-mode fallback — v0 (today)
 - ✓ OpenAI simulate API route with demo-mode fallback — v0 (today)
+- ✓ Signup/login (Supabase Auth, email + password) — v1 Phase 1
+- ✓ Free-tier daily counter (1/day, resets at user-local midnight) — v1 Phase 1
+- ✓ Abuse protection (IP + user rate limits, request validation) — v1 Phase 1
+- ✓ Stripe webhook flips a user to Pro/Creator on payment — v1 Phase 2
+- ✓ Pro/Creator gating on `/api/simulate` + Creator-only features — v1 Phase 2
+- ✓ Cancellation/lapse handling — Pro downgrade when subscription ends — v1 Phase 2
+- ✓ FAQ section on landing (data, accuracy, refund, GDPR) — v1 Phase 3
+- ✓ Social-proof block: testimonial cards + honest animated counter — v1 Phase 3
+- ✓ Stronger, more visceral / TikTok-clip-ready example prompts — v1 Phase 3
+- ✓ Creator-tier shareable 9:16 story-card export (PNG download) — v1 Phase 3
 
 ### Active
 
-<!-- Current milestone: v1 Production Launch — going from working demo to publicly shareable product. -->
+<!-- Current milestone: v1 Production Launch — only Phase 4 (Live Deploy) remains. -->
 
-- [ ] Signup/login so we know who used what (Supabase Auth, email + password)
-- [ ] Free-tier daily counter (1 simulation / day, resets at user-local midnight)
-- [ ] Abuse protection (IP + user rate limits, request validation)
-- [ ] Stripe webhook flow that actually flips a user to Pro/Creator on payment
-- [ ] Pro/Creator gating on `/api/simulate` and Creator-only features
-- [ ] Cancellation/lapse handling — Pro downgrade when subscription ends
-- [ ] FAQ section on landing (objections: data, accuracy, refund, GDPR)
-- [ ] Social-proof block: testimonial cards + counter that animates
-- [ ] Stronger example prompts (more visceral, more TikTok-clip-ready)
-- [ ] Creator-tier shareable 9:16 story-card export (PNG download)
-- [ ] Production env config (OpenAI live key, Stripe live key, Supabase URL)
-- [ ] Vercel deploy with custom domain + working email auth + Stripe webhook URL
+- [ ] Production env config (OpenAI live key, Stripe live key, EU Supabase) — Phase 4
+- [ ] Vercel deploy with custom domain + working email auth + Stripe webhook URL — Phase 4
 
 ### Out of Scope
 
@@ -100,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-30 after initialization*
+*Last updated: 2026-07-01 — Phase 3 (Polish + New Features) complete; only Phase 4 (Live Deploy) remains.*

@@ -15,32 +15,31 @@ progress:
 # STATE: WhatIf
 
 **Last updated:** 2026-07-01
-**Updated by:** gsd-plan-phase 3 — Phase 3 planned + checker-verified
+**Updated by:** gsd-execute-phase 3 — Phase 3 complete (2/2 plans, 5/5 verified, CR-01 + WR-01 fixed)
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phase 03 — polish-new-features
+**Current focus:** Phases 1–3 complete. Next: Phase 4 — Live Deploy (`/gsd-discuss-phase 4` or `/gsd-plan-phase 4`).
 
 ## Current Position
 
-Phase: 03 (polish-new-features) — EXECUTING
-Plan: 1 of 2
-**Phase:** 4
+**Phase:** 4 — Live Deploy (not started)
 **Plan:** Not started
-**Status:** Ready to plan
-**Progress:** 2/4 phases complete; Phase 3 planned
+**Status:** Phase 3 complete (2/2 plans, 5/5 must-haves verified). Code review CR-01 (export payload validation + render guard) and WR-01 (/result grid) fixed inline. One deferred founder manual check remains in 03-HUMAN-UAT.md: eyeball a generated story-card PNG at TikTok overlay scale (EXPORT-02).
+**Progress:** 3/4 phases complete; 28/29 v1 requirements delivered (Phase 4 = DEPLOY-01..04)
 
 ```
-[██████████░░░░░░░░░░] 50% (Phases 1+2 done · 21/29 v1 requirements delivered · Phase 3 planned)
+[███████████████░░░░░] 75% (Phases 1–3 done · 28/29 v1 requirements delivered · Phase 4 = Live Deploy)
 ```
 
 **Phase 3 plans (.planning/phases/03-polish-new-features/):**
 
-- 03-01 (Wave 1) — Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result [CONTENT-04, EXPORT-01/02/03]. Commits: plan b50086f→revisions 20ccd23, 1f3c72c.
-- 03-02 (Wave 1) — Landing conversion: FAQ accordion + testimonials/scroll counter (honest FUTURES_PER_DECISION stat) + FAQ nav link + 8 rewritten example prompts + hero fabricated-count purge [CONTENT-01/02/03].
+- 03-01 (Wave 1) — DONE. Creator 9:16 story-card export: next/og nodejs route + creator-gate/402/demo-allow + bundled fonts + StoryCard + ShareCard on /result [CONTENT-04, EXPORT-01/02/03]. Commits: 5a418d5, 6568c45, bc8127e, summary ab7dd4b.
+- 03-02 (Wave 1) — DONE. Landing conversion: FAQ accordion + testimonials/scroll counter (honest FUTURES_PER_DECISION stat) + FAQ nav link + 8 rewritten example prompts + hero fabricated-count purge [CONTENT-01/02/03]. Commits: 2dc4b3a, de1da04, summary ffbf5a2.
+- Post-review fixes: 93645ad (CR-01 export payload validation + render try/catch + probability clamp; +8 tests), 72c333b (WR-01 /result grid col-span). Suite 29/29 green, tsc clean, build ok.
 
 **Phase 2 plans (.planning/phases/02-stripe-webhook-pro-unlock/):**
 
@@ -136,11 +135,12 @@ Plan: 1 of 2
 
 ### Last action
 
-- Phase 3 planned (research + UI-SPEC → planner → checker). 2 plans, 1 parallel wave. Checker returned 0 blockers / 5 warnings; all 5 fixed via targeted revisions (commits 20ccd23, 1f3c72c): supabaseAdmin null-guard on the export route, pinned verified font URLs, machine-checkable 3–5 testimonial count, RESEARCH Open Questions marked resolved, and the fabricated "10,247" counter reframed to an honest animated stat + purged from the hero (founder decision).
+- Phase 3 executed. Both plans ran as sequential gsd-executor subagents on the main tree (worktrees disabled — node_modules is gitignored so an isolated worktree can't build/test). Post-merge suite green (tests 21/21 at merge, then 29/29 after fixes; tsc + build clean). Code review found 1 critical + 5 warnings; founder chose "fix first" → CR-01 (untrusted-input 500 on /api/export) and WR-01 (/result grid wrap) fixed inline (commits 93645ad, 72c333b). Verifier: 5/5 must-haves at code level. NOTE: gsd-sdk is not on PATH here — the CLI is `node ~/.claude/get-shit-done/bin/gsd-tools.cjs <cmd>` (space-separated subcommands). phase.complete + roadmap update-plan-progress silently no-op'd on this hand-edited ROADMAP/STATE (format mismatch); checkbox + progress table + this body were updated manually.
 
 ### Next action
 
-- `/gsd-execute-phase 3` — both plans (03-01 story-card export, 03-02 landing conversion) run in parallel (Wave 1). Manual founder step at the phase gate: eyeball a generated story-card PNG for TikTok-scale legibility (EXPORT-02).
+- Phase 4 — Live Deploy. `/gsd-discuss-phase 4` (recommended) or `/gsd-plan-phase 4`. Requirements DEPLOY-01..04: live OpenAI/Stripe keys, EU Supabase, Vercel custom domain, demo-mode disabled in prod, founder completes a real paid simulation. Backlog prep: register the WhatIf product domain; register the production Stripe webhook endpoint.
+- Still open (deferred, tracked): founder eyeballs a generated story-card PNG at TikTok overlay scale (EXPORT-02, 03-HUMAN-UAT.md). Non-blocking code-review items WR-02/03/04 + info findings remain in 03-REVIEW.md.
 
 ### Files of record
 

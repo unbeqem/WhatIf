@@ -23,7 +23,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 
 - [x] **Phase 1: Rate-Limiting + User-System** — Supabase Auth, anon + free-tier daily counters, abuse protection on `/api/simulate`
 - [x] **Phase 2: Stripe Webhook + Pro-Unlock Flow** — Webhook flips DB plan on payment, simulate route honors plan, Customer Portal for self-serve management (complete + founder E2E verified 2026-07-01, all 6 PAY criteria)
-- [ ] **Phase 3: Polish + New Features** — FAQ, testimonials, stronger example prompts, Creator-tier 9:16 story-card export
+- [x] **Phase 3: Polish + New Features** — FAQ, testimonials, stronger example prompts, Creator-tier 9:16 story-card export (complete 2026-07-01; 5/5 verified, CR-01 + WR-01 fixed, PNG legibility = founder manual check)
 - [ ] **Phase 4: Live Deploy** — Live keys, EU Supabase, Vercel custom domain, founder runs a real paid simulation
 
 ## Phase Details
@@ -98,7 +98,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 |-------|----------------|--------|-----------|
 | 1. Rate-Limiting + User-System | 5/5 | ✅ Complete (verified 21/21) | 2026-07-01 |
 | 2. Stripe Webhook + Pro-Unlock Flow | 4/4 | ✅ Complete (E2E verified, 6/6 PAY) | 2026-07-01 |
-| 3. Polish + New Features | 0/2 | Planned | — |
+| 3. Polish + New Features | 2/2 | ✅ Complete (5/5 verified; PNG legibility = founder manual check) | 2026-07-01 |
 | 4. Live Deploy | 0/? | Not started | — |
 
 ## Coverage Validation
