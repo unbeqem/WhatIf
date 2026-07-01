@@ -11,9 +11,10 @@ type Props = {
   input: string;
   result: SimulationResult;
   me: Me | undefined;
+  className?: string;
 };
 
-export default function ShareCard({ input, result, me }: Props) {
+export default function ShareCard({ input, result, me, className }: Props) {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export default function ShareCard({ input, result, me }: Props) {
 
   if (isCreator && !upsell) {
     return (
-      <div className="relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5">
+      <div className={`relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5 ${className ?? ""}`}>
         <div className="font-display text-xl">Turn this into content.</div>
         <p className="mt-2 text-sm text-fg-soft">
           Export a 9:16 card for TikTok, Reels, or Stories.
@@ -91,7 +92,7 @@ export default function ShareCard({ input, result, me }: Props) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5">
+    <div className={`relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5 ${className ?? ""}`}>
       <div className="font-display text-xl">
         {upsell ? "Story-card export is a Creator feature." : "Want to share this?"}
       </div>

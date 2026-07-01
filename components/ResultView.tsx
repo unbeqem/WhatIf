@@ -199,7 +199,12 @@ export default function ResultView() {
           </div>
         )}
 
-        <ShareCard input={input} result={result} me={me} />
+        <ShareCard
+          input={input}
+          result={result}
+          me={me}
+          className={showUpsell ? "md:col-span-3" : ""}
+        />
       </div>
     </div>
   );
