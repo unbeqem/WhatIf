@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import DemoPreview from "@/components/DemoPreview";
 import PricingCta from "@/components/PricingCta";
+import FinalCta from "@/components/FinalCta";
 import Testimonials from "@/components/Testimonials";
 import Faq from "@/components/Faq";
 
@@ -336,17 +337,7 @@ export default function Home() {
               Most bad decisions{" "}
               <span className="italic text-fg-soft">feel right</span> in the moment.
             </p>
-            <p className="mx-auto mt-6 max-w-xl text-fg-soft">
-              Take the one you've been carrying — and see what it actually leads to. The first one
-              is free.
-            </p>
-            <Link
-              href="/decision"
-              className="group mt-9 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-violet via-violet to-magenta px-8 py-4 text-base font-semibold text-white shadow-[0_10px_60px_-10px_rgba(168,85,247,0.9)] transition-all hover:brightness-110"
-            >
-              Start your first simulation
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </Link>
+            <FinalCta />
           </div>
         </div>
       </section>
