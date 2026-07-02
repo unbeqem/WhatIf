@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="relative z-10 border-t border-border/60 bg-bg/60 backdrop-blur-sm">
@@ -7,8 +9,8 @@ export default function Footer() {
           <span>WhatIf — the oracle is in beta.</span>
         </div>
         <div className="flex items-center gap-6">
-          <a href="#" className="transition-colors hover:text-fg">Privacy</a>
-          <a href="#" className="transition-colors hover:text-fg">Terms</a>
+          <Link href="/datenschutz" className="transition-colors hover:text-fg">Privacy</Link>
+          <Link href="/impressum" className="transition-colors hover:text-fg">Terms</Link>
           <a href="mailto:business@what-if.tech" className="transition-colors hover:text-fg">Contact</a>
         </div>
       </div>

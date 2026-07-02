@@ -196,6 +196,9 @@ export default function ResultView() {
                 Compare plans
               </Link>
             </div>
+            <p className="mt-2 text-center text-[11px] text-fg-mute">
+              Testphase · Zahlungen im Testmodus, keine echte Abbuchung
+            </p>
           </div>
         )}
 

@@ -80,6 +80,9 @@ export default async function AccountPage() {
                 </p>
                 <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
                 <UpgradeButton plan="creator">Go Creator — €9/mo</UpgradeButton>
+                <p className="mt-2 text-center text-[11px] text-fg-mute">
+                  Testphase · Zahlungen im Testmodus, keine echte Abbuchung
+                </p>
               </div>
             )}
           </div>
