@@ -172,3 +172,12 @@
   background-size: 200% 100%;
   animation: shimmer 2s linear infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-pulse-glow,
+  .animate-shimmer,
+  .gradient-text {
+    animation: none !important;
+  }
+}
