@@ -20,9 +20,11 @@ export default function DatenschutzPage() {
             <div>
               <h2 className="font-display text-2xl">Verantwortlicher</h2>
               <p className="mt-2 text-fg-soft leading-relaxed">
-                [NAME PLACEHOLDER — Gründer trägt ein]
+                Paul Tristan Keick
                 <br />
-                [ADRESSE PLACEHOLDER — Straße, PLZ, Ort — Gründer trägt ein]
+                Helmsweg 30
+                <br />
+                21073 Hamburg
                 <br />
                 E-Mail:{" "}
                 <a href="mailto:business@what-if.tech" className="transition-colors hover:text-fg">

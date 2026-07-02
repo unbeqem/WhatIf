@@ -18,9 +18,11 @@ export default function ImpressumPage() {
             <div>
               <h2 className="font-display text-2xl">Angaben gemäß § 5 DDG</h2>
               <p className="mt-2 text-fg-soft leading-relaxed">
-                [NAME PLACEHOLDER — Gründer trägt ein]
+                Paul Tristan Keick
                 <br />
-                [ADRESSE PLACEHOLDER — Straße, PLZ, Ort — Gründer trägt ein]
+                Helmsweg 30
+                <br />
+                21073 Hamburg
               </p>
             </div>
 
@@ -31,13 +33,15 @@ export default function ImpressumPage() {
                 <a href="mailto:business@what-if.tech" className="transition-colors hover:text-fg">
                   business@what-if.tech
                 </a>
+                <br />
+                Tel.: +49 1748391318
               </p>
             </div>
 
             <div>
               <h2 className="font-display text-2xl">Verantwortlich i.S.d. § 18 Abs. 2 MStV</h2>
               <p className="mt-2 text-fg-soft leading-relaxed">
-                [NAME PLACEHOLDER — Gründer trägt ein]
+                Paul Tristan Keick
               </p>
             </div>
 
