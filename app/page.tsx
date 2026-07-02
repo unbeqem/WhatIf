@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import DemoPreview from "@/components/DemoPreview";
-import UpgradeButton from "@/components/UpgradeButton";
+import PricingCta from "@/components/PricingCta";
 import Testimonials from "@/components/Testimonials";
 import Faq from "@/components/Faq";
 
@@ -288,7 +288,7 @@ export default function Home() {
                 </ul>
 
                 {"plan" in tier.cta && tier.cta.plan ? (
-                  <UpgradeButton plan={tier.cta.plan}>{tier.cta.label}</UpgradeButton>
+                  <PricingCta plan={tier.cta.plan} label={tier.cta.label} />
                 ) : (
                   <Link
                     href={tier.cta.href!}
