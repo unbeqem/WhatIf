@@ -35,10 +35,19 @@ export async function GET(req: NextRequest) {
 
   // Reject external + protocol-relative redirects (W2).
   const target = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+  // Signup/email confirmation (no explicit next) lands on the /verified success
+  // page; recovery + deep-links carry an explicit next and go there directly.
   const successUrl =
     target === "/"
-      ? new URL("/?confirmed=1", url.origin)
+      ? new URL("/verified", url.origin)
       : new URL(target, url.origin);
+
+  // Non-recovery failures show the expired-link state on /verified; recovery
+  // keeps its existing /login redirect.
+  const failureUrl = (type: string | null) =>
+    type === "recovery"
+      ? new URL("/login?error=confirmation_failed", url.origin)
+      : new URL("/verified?error=confirmation_failed", url.origin);
 
   const supabase = await createSupabaseServerClient();
 
@@ -52,9 +61,7 @@ export async function GET(req: NextRequest) {
     });
     if (error) {
       console.error("[auth/confirm] verifyOtp error", error.message);
-      return NextResponse.redirect(
-        new URL("/login?error=confirmation_failed", url.origin),
-      );
+      return NextResponse.redirect(failureUrl(typeParam));
     }
     return NextResponse.redirect(successUrl);
   }
@@ -63,9 +70,7 @@ export async function GET(req: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) {
       console.error("[auth/confirm] exchangeCodeForSession error", error.message);
-      return NextResponse.redirect(
-        new URL("/login?error=confirmation_failed", url.origin),
-      );
+      return NextResponse.redirect(failureUrl(typeParam));
     }
     return NextResponse.redirect(successUrl);
   }
