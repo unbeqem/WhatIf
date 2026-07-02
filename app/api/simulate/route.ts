@@ -3,6 +3,7 @@ import { simulateDecision } from "@/lib/openai";
 import { getAnonIdentity } from "@/lib/anon";
 import { checkBurst } from "@/lib/ratelimit";
 import { checkQuota, logUsage, resolveActor } from "@/lib/quota";
+import { saveSimulation } from "@/lib/history";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -118,6 +119,11 @@ export async function POST(req: NextRequest) {
       inputLength: input.length,
       // no blockedReason -> counts toward quota
     });
+
+    // -------- Step 5: persist history for subscribers (Pro feature) --------
+    if (actor.kind === "user" && (actor.plan === "pro" || actor.plan === "creator")) {
+      await saveSimulation({ userId: actor.userId, input, result });
+    }
 
     return applyCookie(NextResponse.json(result));
   } catch (err) {

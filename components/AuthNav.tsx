@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type Me } from "@/lib/useMe";
+import { type Me, isSubscriberPlan } from "@/lib/useMe";
 
 const PLAN_LABEL: Record<string, string> = { pro: "Pro", creator: "Creator" };
 
@@ -31,6 +31,14 @@ export default function AuthNav({ me }: { me: Me | undefined }) {
 
   return (
     <div className="hidden sm:flex items-center gap-2">
+      {isSubscriberPlan(me.plan) && (
+        <Link
+          href="/history"
+          className="inline-flex items-center rounded-full border border-border-hi bg-surface/60 px-4 py-2 text-sm font-medium text-fg-soft backdrop-blur-sm transition-all hover:border-violet-glow/60 hover:bg-surface-hi hover:text-fg"
+        >
+          History
+        </Link>
+      )}
       <Link
         href="/account"
         title={email}

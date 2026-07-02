@@ -1,5 +1,13 @@
 export type PlanTier = "free" | "pro" | "creator";
 
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
 export type Database = {
   public: {
     Tables: {
@@ -45,6 +53,26 @@ export type Database = {
         };
         Update: Partial<{
           blocked_reason: string | null;
+        }>;
+        Relationships: [];
+      };
+      simulations: {
+        Row: {
+          id: string;
+          user_id: string;
+          input: string;
+          result: Json;
+          summary: string | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          input: string;
+          result: Json;
+          summary?: string | null;
+        };
+        Update: Partial<{
+          summary: string | null;
         }>;
         Relationships: [];
       };
