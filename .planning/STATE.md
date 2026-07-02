@@ -133,7 +133,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 
 - **Email-verified success page + auto-redirect** (auth) — success screen after the confirm-link + auto-redirect; `app/auth/confirm/route.ts`. → `2026-07-02-verified-success-page-redirect.md`
 - **Decision history with per-entry summary** (Pro feature, already advertised but unbuilt) — persist simulations in Supabase + a `/history` or account view; plan-gated. → `2026-07-02-decision-history-view.md`
-- **Hide "ask your first question" hint for subscribers** (ui) — plan-aware hide once a question was asked + user is pro/creator (reuse useMe like PricingCta). → `2026-07-02-hide-first-question-hint-for-subscribers.md`
+- ~~**Hide "ask your first question" hint for subscribers** (ui)~~ — DONE via quick task 260702-h9x (commit 12fa37a). Landing final CTA is now plan-aware (`components/FinalCta.tsx`).
 
 ### Blockers
 
@@ -149,6 +149,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260702-l7d | Plan-aware pricing CTAs on landing (Current plan / Included / upgrade instead of always Go Pro) | 2026-07-02 | d17289c | [260702-l7d-plan-aware-pricing-cta](./quick/260702-l7d-plan-aware-pricing-cta/) |
 | 260702-m0i | Site-wide dismissible test-phase banner (payments in test mode) — overrides D-10 | 2026-07-02 | 222d4c7 | [260702-m0i-demo-testphase-banner](./quick/260702-m0i-demo-testphase-banner/) |
 | 260702-m3e | Perf: GPU-promote background orbs + prefers-reduced-motion guard (smoother animation/scroll) | 2026-07-02 | cac20cb | [260702-m3e-perf-orbs-scroll](./quick/260702-m3e-perf-orbs-scroll/) |
+| 260702-h9x | Plan-aware final CTA — hide "first question" hint for returning subscribers | 2026-07-02 | 12fa37a | [260702-h9x-hide-first-question-hint-subscribers](./quick/260702-h9x-hide-first-question-hint-subscribers/) |
 
 ## Session Continuity
 
