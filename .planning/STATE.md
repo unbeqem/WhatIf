@@ -138,6 +138,7 @@ Plan: 2 of 3
 | 260701-01 | Postgres-backed per-IP burst guard (replaces Upstash) | 2026-07-01 | 9eedee6 | [260701-01-postgres-burst-guard](./quick/260701-01-postgres-burst-guard/) |
 | 260701-nnc | Swap placeholder contact email + cosmetic domain to real values (business@what-if.tech, what-if.tech) | 2026-07-01 | cadd82c | [260701-nnc-swap-contact-email-domain](./quick/260701-nnc-swap-contact-email-domain/) |
 | 260702-ky3 | Fill Impressum + Datenschutz with real founder data (name/address/phone) | 2026-07-02 | 85f211b | [260702-ky3-legal-real-data](./quick/260702-ky3-legal-real-data/) |
+| 260702-l7d | Plan-aware pricing CTAs on landing (Current plan / Included / upgrade instead of always Go Pro) | 2026-07-02 | d17289c | [260702-l7d-plan-aware-pricing-cta](./quick/260702-l7d-plan-aware-pricing-cta/) |
 
 ## Session Continuity
 
