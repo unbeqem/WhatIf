@@ -131,7 +131,7 @@ Plan: 2 of 3
 
 Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/todos/pending/`:
 
-- **Email-verified success page + auto-redirect** (auth) — success screen after the confirm-link + auto-redirect; `app/auth/confirm/route.ts`. → `2026-07-02-verified-success-page-redirect.md`
+- ~~**Email-verified success page + auto-redirect** (auth)~~ — DONE via quick task 260702-p2k (commit 0acb9bc). New `/verified` page + confirm-route reroute; recovery flow untouched.
 - **Decision history with per-entry summary** (Pro feature, already advertised but unbuilt) — persist simulations in Supabase + a `/history` or account view; plan-gated. → `2026-07-02-decision-history-view.md`
 - ~~**Hide "ask your first question" hint for subscribers** (ui)~~ — DONE via quick task 260702-h9x (commit 12fa37a). Landing final CTA is now plan-aware (`components/FinalCta.tsx`).
 
@@ -150,6 +150,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260702-m0i | Site-wide dismissible test-phase banner (payments in test mode) — overrides D-10 | 2026-07-02 | 222d4c7 | [260702-m0i-demo-testphase-banner](./quick/260702-m0i-demo-testphase-banner/) |
 | 260702-m3e | Perf: GPU-promote background orbs + prefers-reduced-motion guard (smoother animation/scroll) | 2026-07-02 | cac20cb | [260702-m3e-perf-orbs-scroll](./quick/260702-m3e-perf-orbs-scroll/) |
 | 260702-h9x | Plan-aware final CTA — hide "first question" hint for returning subscribers | 2026-07-02 | 12fa37a | [260702-h9x-hide-first-question-hint-subscribers](./quick/260702-h9x-hide-first-question-hint-subscribers/) |
+| 260702-p2k | Email-verified success page (/verified) + auto-redirect + expired-link state | 2026-07-02 | 0acb9bc | [260702-p2k-verified-success-page](./quick/260702-p2k-verified-success-page/) |
 
 ## Session Continuity
 
