@@ -89,7 +89,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
   3. The app is reachable at https://what-if.tech with HTTPS, email-confirmation links route to /auth/confirm correctly, and /impressum + /datenschutz are linked from the Footer.
   4. The founder completes the full funnel on the live domain — sign up → confirm email → simulate (real OpenAI <8s) → hit paywall (test-mode notice) → Stripe test-card pay → plan flips via webhook → Creator export → portal cancel. [DEPLOY-04, test-mode]
 **Plans**: 3 plans (3 waves — code, then founder dashboard config, then founder E2E smoke)
-  - [ ] 04-01-PLAN.md — Legal pages (/impressum + /datenschutz, German) + Footer link wiring + test-mode notice on both paywall surfaces + .env.example comment (DEPLOY-04 support)
+  - [x] 04-01-PLAN.md — Legal pages (/impressum + /datenschutz, German) + Footer link wiring + test-mode notice on both paywall surfaces + .env.example comment (DEPLOY-04 support)
   - [ ] 04-02-PLAN.md — Founder dashboard config: Vercel env matrix (real OpenAI + EU Supabase + Stripe test keys + NEXT_PUBLIC_URL) + Supabase Auth Site URL/redirect + Stripe test webhook registration (DEPLOY-01/02/03)
   - [ ] 04-03-PLAN.md — Founder live-URL E2E smoke with Stripe test cards: signup→confirm→simulate→paywall→test-pay→plan flip→Creator export→portal cancel (DEPLOY-02/04)
 **UI hint**: no
@@ -102,7 +102,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 | 1. Rate-Limiting + User-System | 5/5 | ✅ Complete (verified 21/21) | 2026-07-01 |
 | 2. Stripe Webhook + Pro-Unlock Flow | 4/4 | ✅ Complete (E2E verified, 6/6 PAY) | 2026-07-01 |
 | 3. Polish + New Features | 2/2 | ✅ Complete (5/5 verified; PNG legibility = founder manual check) | 2026-07-01 |
-| 4. Live Deploy | 0/3 | Planned (test-mode-first) | — |
+| 4. Live Deploy | 1/3 | In progress (test-mode-first) | — |
 
 ## Coverage Validation
 

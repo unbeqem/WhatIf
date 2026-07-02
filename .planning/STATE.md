@@ -3,37 +3,43 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-07-02T07:30:06.935Z"
+last_updated: "2026-07-02T08:29:31.147Z"
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 14
-  completed_plans: 12
-  percent: 86
+  total_plans: 15
+  completed_plans: 13
+  percent: 87
 ---
 
 # STATE: WhatIf
 
-**Last updated:** 2026-07-01
-**Updated by:** gsd-discuss-phase 4 — Phase 4 context gathered (test-mode-first deploy)
+**Last updated:** 2026-07-02
+**Updated by:** gsd-execute-phase 4 — Plan 04-01 (legal pages + test-mode notice) executed
 
 ## Project Reference
 
 **Project:** WhatIf — AI decision-simulation SaaS
 **Milestone:** v1-production-launch
 **Core Value:** A user must be able to type a decision, get a sober three-future simulation in seconds, hit a soft paywall, and pay — without friction.
-**Current focus:** Phases 1–3 complete. Phase 4 discussed — context locked in `.planning/phases/04-live-deploy/04-CONTEXT.md` (deploy-ready, Stripe TEST mode; live payments deferred post-Gewerbe). Next: `/gsd-plan-phase 4`.
+**Current focus:** Phase 04 — live-deploy
 
 ## Current Position
 
-**Phase:** 4 — Live Deploy (not started)
-**Plan:** Not started
-**Status:** Ready to execute
-**Progress:** 3/4 phases complete; 28/29 v1 requirements delivered (Phase 4 = DEPLOY-01..04)
+Phase: 04 (live-deploy) — EXECUTING
+Plan: 2 of 3
+**Phase:** 4 — Live Deploy (in progress)
+**Plan:** 04-01 DONE; next is 04-02 (founder dashboard config)
+**Status:** Executing Phase 04
+**Progress:** 3/4 phases complete; 04-01 done; 28/29 v1 requirements delivered (Phase 4 = DEPLOY-01..04)
 
 ```
-[███████████████░░░░░] 75% (Phases 1–3 done · 28/29 v1 requirements delivered · Phase 4 = Live Deploy)
+[████████████████░░░░] 87% (Phases 1–3 done · 04-01 done · 28/29 v1 requirements delivered · Phase 4 = Live Deploy)
 ```
+
+**Phase 4 plans (.planning/phases/04-live-deploy/):**
+
+- 04-01 (Wave 1) — DONE. German legal pages (/impressum, /datenschutz) naming real processors (Supabase, Stripe, OpenAI, Resend/IONOS) + Footer Privacy/Terms wired to real routes + discreet test-mode notice on ResultView upsell + account free-plan block + .env.example sk_test_/sk_live_ doc comment [DEPLOY-04 support]. Commits: e1b03d6, c73f3e5, summary 746f209.
 
 **Phase 3 plans (.planning/phases/03-polish-new-features/):**
 
@@ -136,14 +142,16 @@ progress:
 
 ### Last action
 
-- Phase 4 discussed (test-mode-first re-scope). Founder decisions locked in 04-CONTEXT.md: deploy now to a *.vercel.app subdomain (real domain later); reuse existing EU Supabase project zdirwmqfoynxmfifzlvt as prod; Stripe stays in TEST mode (live keys + real paid simulation deferred to a post-Gewerbeanmeldung step); add real /impressum + /datenschutz pages + wire dead Footer links; discreet test-mode notice at checkout only. Rationale: WhatIf is a hobby project with no registered Gewerbe — accepting real money legally requires a Gewerbeanmeldung, so this phase proves the whole machine with test cards and the flip to live money is a later keys-and-URLs swap.
-- (Prior) Phase 3 executed. Both plans ran as sequential gsd-executor subagents on the main tree (worktrees disabled — node_modules is gitignored so an isolated worktree can't build/test). Post-merge suite green (tests 21/21 at merge, then 29/29 after fixes; tsc + build clean). Code review found 1 critical + 5 warnings; founder chose "fix first" → CR-01 (untrusted-input 500 on /api/export) and WR-01 (/result grid wrap) fixed inline (commits 93645ad, 72c333b). Verifier: 5/5 must-haves at code level. NOTE: gsd-sdk is not on PATH here — the CLI is `node ~/.claude/get-shit-done/bin/gsd-tools.cjs <cmd>` (space-separated subcommands). phase.complete + roadmap update-plan-progress silently no-op'd on this hand-edited ROADMAP/STATE (format mismatch); checkbox + progress table + this body were updated manually.
+- Plan 04-01 executed (sequential main-tree executor, branching_strategy=none). Created `/impressum` + `/datenschutz` German legal pages (real processors named: Supabase, Stripe, OpenAI, Resend/IONOS; founder-fill placeholders for name/address, never fabricated). Wired Footer's dead `href="#"` Privacy/Terms links to the new routes via next/link. Added the discreet German test-mode notice ("Testphase · Zahlungen im Testmodus, keine echte Abbuchung") to both paywall surfaces (ResultView upsell block, account free-plan block). Documented sk_test_/sk_live_ distinction in `.env.example` (comment-only). tsc clean, `npm run build` succeeds with both new routes static. No deviations. Commits: e1b03d6 (Task 1), c73f3e5 (Task 2), 746f209 (summary).
+- (Prior) Phase 4 discussed (test-mode-first re-scope). Founder decisions locked in 04-CONTEXT.md: deploy now on what-if.tech (real domain already live); reuse existing EU Supabase project zdirwmqfoynxmfifzlvt as prod; Stripe stays in TEST mode (live keys + real paid simulation deferred to a post-Gewerbeanmeldung step). Rationale: WhatIf is a hobby project with no registered Gewerbe — accepting real money legally requires a Gewerbeanmeldung, so this phase proves the whole machine with test cards and the flip to live money is a later keys-and-URLs swap.
+- (Prior) Phase 3 executed. Both plans ran as sequential gsd-executor subagents on the main tree (worktrees disabled — node_modules is gitignored so an isolated worktree can't build/test). Post-merge suite green (tests 21/21 at merge, then 29/29 after fixes; tsc + build clean). Code review found 1 critical + 5 warnings; founder chose "fix first" → CR-01 (untrusted-input 500 on /api/export) and WR-01 (/result grid wrap) fixed inline (commits 93645ad, 72c333b). Verifier: 5/5 must-haves at code level. NOTE: gsd-sdk is not on PATH here — the CLI is `node ~/.claude/get-shit-done/bin/gsd-tools.cjs <cmd>` (space-separated subcommands). `state advance-plan` and `roadmap update-plan-progress` silently error/no-op on this hand-edited ROADMAP/STATE (format mismatch); checkbox + progress table + this body updated manually each time.
 
 ### Next action
 
-- `/gsd-plan-phase 4` — CONTEXT.md is ready (04-CONTEXT.md). Plan the test-mode-first live deploy: Vercel deploy on *.vercel.app, prod env (real OpenAI + EU Supabase + Stripe TEST keys), env-driven base URL for later domain swap, register the Stripe test-mode webhook on the Vercel URL, Supabase Site/redirect URLs, /impressum + /datenschutz pages + Footer links, discreet checkout test-mode notice. NOTE re-scope: DEPLOY-02 (live Stripe) + DEPLOY-04 (real paid simulation) are intentionally test-mode this phase; live keys + real payment are a deferred post-Gewerbe founder step.
-- Founder prerequisites for Phase 4: a real OpenAI API key with billing (DEPLOY-01); a Vercel project connected to the repo; Stripe test products/prices for Pro/Creator; (later) register domain + Gewerbeanmeldung before flipping to live payments. Also check the co-orga employment contract re: Nebentätigkeit.
-- Still open (deferred, tracked): non-blocking code-review items WR-02/03/04 + info findings in 03-REVIEW.md.
+- `/gsd-execute-phase 4` continues with **04-02-PLAN.md** — founder dashboard config: Vercel env matrix (real OpenAI + EU Supabase + Stripe test keys + NEXT_PUBLIC_URL=https://what-if.tech), Supabase Auth Site URL/redirect URLs, Stripe test-mode webhook registration (DEPLOY-01/02/03). This plan is founder-action-heavy (dashboard clicks), not pure code.
+- Founder prerequisites for 04-02: a real OpenAI API key with billing (DEPLOY-01); Vercel project already connected + what-if.tech mapped; Stripe test products/prices for Pro/Creator; Supabase Site URL updated to https://what-if.tech.
+- After 04-02: **04-03-PLAN.md** — founder live-URL E2E smoke with Stripe test cards (signup→confirm→simulate→paywall→test-pay→plan flip→Creator export→portal cancel).
+- Still open (deferred, tracked): non-blocking code-review items WR-02/03/04 + info findings in 03-REVIEW.md. Founder-side: fill in real name/address placeholders in app/impressum/page.tsx and app/datenschutz/page.tsx before treating Impressum as legally complete.
 
 ### Files of record
 
