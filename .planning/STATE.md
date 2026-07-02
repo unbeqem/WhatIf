@@ -140,6 +140,7 @@ Plan: 2 of 3
 | 260702-ky3 | Fill Impressum + Datenschutz with real founder data (name/address/phone) | 2026-07-02 | 85f211b | [260702-ky3-legal-real-data](./quick/260702-ky3-legal-real-data/) |
 | 260702-l7d | Plan-aware pricing CTAs on landing (Current plan / Included / upgrade instead of always Go Pro) | 2026-07-02 | d17289c | [260702-l7d-plan-aware-pricing-cta](./quick/260702-l7d-plan-aware-pricing-cta/) |
 | 260702-m0i | Site-wide dismissible test-phase banner (payments in test mode) — overrides D-10 | 2026-07-02 | 222d4c7 | [260702-m0i-demo-testphase-banner](./quick/260702-m0i-demo-testphase-banner/) |
+| 260702-m3e | Perf: GPU-promote background orbs + prefers-reduced-motion guard (smoother animation/scroll) | 2026-07-02 | cac20cb | [260702-m3e-perf-orbs-scroll](./quick/260702-m3e-perf-orbs-scroll/) |
 
 ## Session Continuity
 
