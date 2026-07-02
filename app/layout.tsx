@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import DemoBanner from "@/components/DemoBanner";
 
 export const metadata: Metadata = {
   title: "WhatIf — The AI oracle for your hardest decisions",
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <div className="pointer-events-none fixed inset-0 -z-10 grid-bg opacity-60" />
         <div className="pointer-events-none fixed inset-0 -z-10 noise opacity-[0.35] mix-blend-overlay" />
+        <DemoBanner />
         {children}
       </body>
     </html>
