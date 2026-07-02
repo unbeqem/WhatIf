@@ -127,6 +127,14 @@ Plan: 2 of 3
 - Phase 4 backlog: register the WhatIf product domain; prod Stripe live keys + register the production webhook endpoint (local dev used `stripe listen`).
 - Phase 2 setup done by founder: migration 0003 applied; Stripe test `sk_test_`/`whsec_` in `.env.local`; Customer Portal settings saved.
 
+### Pending Todos
+
+Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/todos/pending/`:
+
+- **Email-verified success page + auto-redirect** (auth) — success screen after the confirm-link + auto-redirect; `app/auth/confirm/route.ts`. → `2026-07-02-verified-success-page-redirect.md`
+- **Decision history with per-entry summary** (Pro feature, already advertised but unbuilt) — persist simulations in Supabase + a `/history` or account view; plan-gated. → `2026-07-02-decision-history-view.md`
+- **Hide "ask your first question" hint for subscribers** (ui) — plan-aware hide once a question was asked + user is pro/creator (reuse useMe like PricingCta). → `2026-07-02-hide-first-question-hint-for-subscribers.md`
+
 ### Blockers
 
 - None. (Was: Upstash provisioning — resolved by switching the burst guard to Postgres in quick task 260701-01.)
