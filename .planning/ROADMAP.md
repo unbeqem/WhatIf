@@ -24,7 +24,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 - [x] **Phase 1: Rate-Limiting + User-System** — Supabase Auth, anon + free-tier daily counters, abuse protection on `/api/simulate`
 - [x] **Phase 2: Stripe Webhook + Pro-Unlock Flow** — Webhook flips DB plan on payment, simulate route honors plan, Customer Portal for self-serve management (complete + founder E2E verified 2026-07-01, all 6 PAY criteria)
 - [x] **Phase 3: Polish + New Features** — FAQ, testimonials, stronger example prompts, Creator-tier 9:16 story-card export (complete 2026-07-01; 5/5 verified, CR-01 + WR-01 fixed, PNG legibility = founder manual check)
-- [ ] **Phase 4: Live Deploy** — Live keys, EU Supabase, Vercel custom domain, founder runs a real paid simulation
+- [ ] **Phase 4: Live Deploy** — Test-mode-first public launch on what-if.tech: real OpenAI + EU Supabase (demo off), Stripe in TEST mode, legal pages, founder E2E smoke with test cards (live keys + real payment deferred post-Gewerbe)
 
 ## Phase Details
 
@@ -80,17 +80,20 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 **UI hint**: yes
 
 ### Phase 4: Live Deploy
-**Goal**: WhatIf is live on a real domain, running on live API keys, with the founder having personally completed an end-to-end paid simulation in production.
+**Goal**: WhatIf is publicly live on what-if.tech running real OpenAI + real EU Supabase (demo off) with Stripe in TEST mode, linked German legal pages, and the founder having completed a full end-to-end smoke of the funnel with Stripe test cards. (Re-scope per 04-CONTEXT.md: live Stripe keys + a real paid simulation are deliberately deferred to a post-Gewerbeanmeldung founder step and are OUT OF SCOPE this phase.)
 **Depends on**: Phase 1, Phase 2, Phase 3 (cannot ship publicly without auth, billing, and the conversion surfaces)
 **Requirements**: DEPLOY-01, DEPLOY-02, DEPLOY-03, DEPLOY-04
-**Success Criteria** (what must be TRUE):
-  1. The Vercel production project has live OpenAI, live Stripe, and EU-region Supabase credentials configured; demo-mode is disabled in production.
-  2. The Stripe webhook URL is registered against the production webhook secret, and a live test event (or a real €0.50 founder payment) is observed flipping a user to Pro in the production DB.
-  3. The app is reachable at the chosen custom domain with HTTPS, email-confirmation links route correctly, and password reset works end-to-end against the production Supabase project.
-  4. The founder completes a full paid simulation flow on the live domain — sign up → confirm email → pay → run a Pro simulation — and the result returns within 8 seconds.
-**Plans**: TBD
+**Success Criteria** (what must be TRUE, as re-scoped to test-mode):
+  1. The Vercel production project has real OpenAI + EU-region Supabase credentials configured (demo-mode OFF for both) and Stripe TEST keys (test mode, not the demo fallback). [DEPLOY-01, DEPLOY-03]
+  2. The Stripe TEST-mode webhook URL is registered against the production webhook secret at https://what-if.tech/api/stripe/webhook, and a test event is observed flipping a user to Pro/Creator in the production DB. [DEPLOY-02, test-mode]
+  3. The app is reachable at https://what-if.tech with HTTPS, email-confirmation links route to /auth/confirm correctly, and /impressum + /datenschutz are linked from the Footer.
+  4. The founder completes the full funnel on the live domain — sign up → confirm email → simulate (real OpenAI <8s) → hit paywall (test-mode notice) → Stripe test-card pay → plan flips via webhook → Creator export → portal cancel. [DEPLOY-04, test-mode]
+**Plans**: 3 plans (3 waves — code, then founder dashboard config, then founder E2E smoke)
+  - [ ] 04-01-PLAN.md — Legal pages (/impressum + /datenschutz, German) + Footer link wiring + test-mode notice on both paywall surfaces + .env.example comment (DEPLOY-04 support)
+  - [ ] 04-02-PLAN.md — Founder dashboard config: Vercel env matrix (real OpenAI + EU Supabase + Stripe test keys + NEXT_PUBLIC_URL) + Supabase Auth Site URL/redirect + Stripe test webhook registration (DEPLOY-01/02/03)
+  - [ ] 04-03-PLAN.md — Founder live-URL E2E smoke with Stripe test cards: signup→confirm→simulate→paywall→test-pay→plan flip→Creator export→portal cancel (DEPLOY-02/04)
 **UI hint**: no
-**Notes**: Smallest phase by code volume (env vars, DNS, webhook registration, smoke test) — but treat as a real phase, not a one-liner. This is the launch gate; everything before it is preparation.
+**Notes**: Smallest phase by code volume (env vars, DNS, webhook registration, smoke test) — but treat as a real phase, not a one-liner. This is the launch gate; everything before it is preparation. Test-mode-first: proves the whole machine with test cards; the flip to live money is a later keys-and-URLs swap (deferred, tracked in 04-CONTEXT.md Deferred Ideas).
 
 ## Progress
 
@@ -99,7 +102,7 @@ Phase order is fixed by the founder (see PROJECT.md Key Decisions). Do not re-se
 | 1. Rate-Limiting + User-System | 5/5 | ✅ Complete (verified 21/21) | 2026-07-01 |
 | 2. Stripe Webhook + Pro-Unlock Flow | 4/4 | ✅ Complete (E2E verified, 6/6 PAY) | 2026-07-01 |
 | 3. Polish + New Features | 2/2 | ✅ Complete (5/5 verified; PNG legibility = founder manual check) | 2026-07-01 |
-| 4. Live Deploy | 0/? | Not started | — |
+| 4. Live Deploy | 0/3 | Planned (test-mode-first) | — |
 
 ## Coverage Validation
 
@@ -115,4 +118,4 @@ No orphans. No duplicates. Order matches founder-locked phase sequence in PROJEC
 
 ---
 *Roadmap created: 2026-06-30*
-*Last updated: 2026-07-01 after Phase 3 planning*
+*Last updated: 2026-07-02 after Phase 4 planning (test-mode-first re-scope)*
