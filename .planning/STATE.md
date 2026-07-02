@@ -132,7 +132,7 @@ Plan: 2 of 3
 Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/todos/pending/`:
 
 - ~~**Email-verified success page + auto-redirect** (auth)~~ — DONE via quick task 260702-p2k (commit 0acb9bc). New `/verified` page + confirm-route reroute; recovery flow untouched.
-- **Decision history with per-entry summary** (Pro feature, already advertised but unbuilt) — persist simulations in Supabase + a `/history` or account view; plan-gated. → `2026-07-02-decision-history-view.md`
+- ~~**Decision history with per-entry summary** (Pro feature)~~ — DONE via quick task 260702-r5t (commit 315eb90). Migration 0004 + `/history` page + write on /api/simulate for subscribers. **Founder must apply migration 0004_history.sql in Supabase.**
 - ~~**Hide "ask your first question" hint for subscribers** (ui)~~ — DONE via quick task 260702-h9x (commit 12fa37a). Landing final CTA is now plan-aware (`components/FinalCta.tsx`).
 
 ### Blockers
@@ -151,6 +151,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260702-m3e | Perf: GPU-promote background orbs + prefers-reduced-motion guard (smoother animation/scroll) | 2026-07-02 | cac20cb | [260702-m3e-perf-orbs-scroll](./quick/260702-m3e-perf-orbs-scroll/) |
 | 260702-h9x | Plan-aware final CTA — hide "first question" hint for returning subscribers | 2026-07-02 | 12fa37a | [260702-h9x-hide-first-question-hint-subscribers](./quick/260702-h9x-hide-first-question-hint-subscribers/) |
 | 260702-p2k | Email-verified success page (/verified) + auto-redirect + expired-link state | 2026-07-02 | 0acb9bc | [260702-p2k-verified-success-page](./quick/260702-p2k-verified-success-page/) |
+| 260702-r5t | Decision history for Pro/Creator (migration 0004 + /history + write on simulate) | 2026-07-02 | 315eb90 | [260702-r5t-decision-history](./quick/260702-r5t-decision-history/) |
 
 ## Session Continuity
 
