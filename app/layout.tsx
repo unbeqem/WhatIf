@@ -3,6 +3,7 @@ import "./globals.css";
 import DemoBanner from "@/components/DemoBanner";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "https://what-if.tech"),
   title: "WhatIf — The AI oracle for your hardest decisions",
   description:
     "Simulate three realistic futures for any decision in seconds. WhatIf is the AI oracle for the choices that actually matter.",
