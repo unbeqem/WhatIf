@@ -6,10 +6,12 @@ function sub(opts: {
   amount?: number;
   status?: Stripe.Subscription.Status;
   cancelAtPeriodEnd?: boolean;
+  metaPlan?: string;
 }): Stripe.Subscription {
   return {
     status: opts.status ?? "active",
     cancel_at_period_end: opts.cancelAtPeriodEnd ?? false,
+    metadata: opts.metaPlan ? { plan: opts.metaPlan } : {},
     items: {
       data:
         opts.amount === undefined
@@ -34,6 +36,16 @@ describe("planFromSubscription", () => {
 
   it("falls back to pro when items/price is missing (unit_amount undefined -> 0)", () => {
     expect(planFromSubscription(sub({ amount: undefined }))).toBe("pro");
+  });
+
+  it("annual Pro (amount 4000) stays pro via metadata, not misclassified as creator", () => {
+    expect(planFromSubscription(sub({ amount: 4000, metaPlan: "pro" }))).toBe("pro");
+  });
+
+  it("metadata plan wins over amount for creator too", () => {
+    expect(planFromSubscription(sub({ amount: 7900, metaPlan: "creator" }))).toBe(
+      "creator",
+    );
   });
 });
 

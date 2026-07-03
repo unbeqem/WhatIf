@@ -38,16 +38,22 @@ function styleFor(tag: string) {
 export default function ResultView() {
   const [data, setData] = useState<Stored | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [oneTimeUnlocked, setOneTimeUnlocked] = useState(false);
   const me = useMe();
   // Show the upsell only once we know the viewer is NOT a subscriber, so Pro/Creator
   // users never flash the "Unlock Pro" block. While loading (me undefined) it stays hidden.
-  const showUpsell = me !== undefined && !isSubscriberPlan(me.plan);
+  // A one-time deep-dive purchase (?unlocked=1) also reveals the held-back insight.
+  const showUpsell =
+    me !== undefined && !isSubscriberPlan(me.plan) && !oneTimeUnlocked;
 
   useEffect(() => {
     setHydrated(true);
     try {
       const raw = sessionStorage.getItem("whatif:last");
       if (raw) setData(JSON.parse(raw) as Stored);
+      if (new URLSearchParams(window.location.search).has("unlocked")) {
+        setOneTimeUnlocked(true);
+      }
     } catch {
       /* noop */
     }
@@ -225,9 +231,16 @@ function LockedInsightBlock({
             </p>
             <div className="mx-auto mt-5 max-w-xs space-y-2">
               <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
+              <UpgradeButton
+                plan="pro"
+                mode="deepdive"
+                className="inline-flex w-full items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-2.5 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg disabled:opacity-60"
+              >
+                Or unlock just this one — €3
+              </UpgradeButton>
               <Link
                 href="/#pricing"
-                className="inline-flex w-full items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-2.5 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
+                className="block text-[11px] text-fg-mute underline-offset-2 hover:text-fg-soft hover:underline"
               >
                 Compare plans
               </Link>

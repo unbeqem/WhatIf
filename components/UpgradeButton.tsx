@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import type { Plan } from "@/lib/stripe";
+import type { Plan, Interval } from "@/lib/stripe";
 
 type Props = {
   plan: Plan;
+  interval?: Interval;
+  mode?: "subscription" | "deepdive";
   children: React.ReactNode;
   className?: string;
 };
 
-export default function UpgradeButton({ plan, children, className }: Props) {
+export default function UpgradeButton({ plan, interval, mode, children, className }: Props) {
   const [loading, setLoading] = useState(false);
   const [demoNote, setDemoNote] = useState<string | null>(null);
 
@@ -20,10 +22,15 @@ export default function UpgradeButton({ plan, children, className }: Props) {
       const res = await fetch("/api/stripe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, interval, mode }),
       });
       const data = await res.json();
       if (data.demo) {
+        // The deep-dive "purchase" is just the reveal, so honor its URL even in demo.
+        if (mode === "deepdive" && data.url) {
+          window.location.href = data.url;
+          return;
+        }
         setDemoNote("Stripe keys not configured — running in demo mode.");
         setTimeout(() => setDemoNote(null), 3500);
       } else if (data.url) {

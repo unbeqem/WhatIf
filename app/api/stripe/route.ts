@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createCheckoutSession, type Plan } from "@/lib/stripe";
+import {
+  createCheckoutSession,
+  createDeepDiveSession,
+  type Plan,
+  type Interval,
+} from "@/lib/stripe";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
-    const { plan } = (await req.json()) as { plan?: Plan };
+    const { plan, interval, mode } = (await req.json()) as {
+      plan?: Plan;
+      interval?: Interval;
+      mode?: "subscription" | "deepdive";
+    };
     const target: Plan = plan === "creator" ? "creator" : "pro";
+    const billing: Interval = interval === "year" ? "year" : "month";
 
     let userId: string | undefined;
     let email: string | undefined;
@@ -22,7 +32,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { url, demo } = await createCheckoutSession(target, { userId, email });
+    const { url, demo } =
+      mode === "deepdive"
+        ? await createDeepDiveSession({ userId, email })
+        : await createCheckoutSession(target, { userId, email, interval: billing });
     return NextResponse.json({ url, demo });
   } catch (err) {
     console.error("[stripe] error", err);
