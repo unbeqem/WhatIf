@@ -14,11 +14,20 @@ function contextBlock(ctx?: DecisionContext): string {
   return `\n\nWhat you know about the person (weight this — tailor the scenarios and recommendation to it):\n${lines.join("\n")}\n`;
 }
 
-export const decisionPrompt = (input: string, ctx?: DecisionContext) => `Decision under consideration:
+function refinementBlock(refinement?: string): string {
+  if (!refinement) return "";
+  return `\n\nThe person is refining the same decision with a new variable — re-run the projection accounting for this, not as a separate decision:\n"""\n${refinement}\n"""\n`;
+}
+
+export const decisionPrompt = (
+  input: string,
+  ctx?: DecisionContext,
+  refinement?: string,
+) => `Decision under consideration:
 """
 ${input}
 """
-${contextBlock(ctx)}
+${contextBlock(ctx)}${refinementBlock(refinement)}
 Produce three realistic future scenarios across short-term (3-6 months) and long-term (2-5 years) horizons. Consider psychological, financial, social, and identity-level consequences.
 
 Return STRICT JSON. No prose outside the JSON. Schema:

@@ -166,6 +166,22 @@ export default function ResultView() {
         <LockedInsightBlock insight={result.locked_insight} locked={showUpsell} />
       )}
 
+      {/* Refine & branch — a subscriber feature */}
+      <RefineBox
+        original={input}
+        isSubscriber={me !== undefined && isSubscriberPlan(me.plan)}
+        onResult={(newResult) => {
+          const next = { input, result: newResult, ts: Date.now() };
+          setData(next);
+          try {
+            sessionStorage.setItem("whatif:last", JSON.stringify(next));
+          } catch {
+            /* noop */
+          }
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
+
       {/* Actions + Share/Creator export */}
       <div className={`grid gap-4 ${me ? "md:grid-cols-2" : ""}`}>
         <Link
@@ -252,6 +268,106 @@ function LockedInsightBlock({
         </div>
       )}
     </motion.div>
+  );
+}
+
+function RefineBox({
+  original,
+  isSubscriber,
+  onResult,
+}: {
+  original: string;
+  isSubscriber: boolean;
+  onResult: (result: SimulationResult) => void;
+}) {
+  const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (!isSubscriber) {
+    return (
+      <div className="rounded-3xl border border-violet-glow/40 bg-gradient-to-br from-violet/12 to-surface/60 p-7 md:p-8">
+        <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-violet-glow">
+          Pro feature
+        </div>
+        <div className="mt-1 font-display text-2xl leading-tight">Branch this decision.</div>
+        <p className="mt-2 text-sm text-fg-soft">
+          Add a variable — &ldquo;what if I also had a kid&rdquo;, &ldquo;what if I had six months
+          of savings&rdquo; — and re-run the projection. Free gives you one shot; Pro lets you
+          branch.
+        </p>
+        <div className="mt-4 max-w-xs">
+          <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
+        </div>
+      </div>
+    );
+  }
+
+  async function refine(e: React.FormEvent) {
+    e.preventDefault();
+    const refinement = text.trim();
+    if (refinement.length < 3) {
+      setError("Add a little more to branch on.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: original, refinement }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        setError(
+          d.error === "limit_reached"
+            ? "Daily limit reached."
+            : "Couldn't re-simulate. Try again in a moment.",
+        );
+        return;
+      }
+      const d = (await res.json()) as SimulationResult;
+      onResult(d);
+      setText("");
+    } catch {
+      setError("Connection failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form
+      onSubmit={refine}
+      className="rounded-3xl border border-cyan/30 bg-surface/40 p-6 md:p-8"
+    >
+      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan-glow">
+        Refine &amp; branch
+      </div>
+      <div className="mt-1 font-display text-2xl leading-tight">
+        Change one variable, see it play out.
+      </div>
+      <div className="mt-4 rounded-2xl border border-border bg-bg-soft/60 p-2 transition-colors focus-within:border-cyan/50">
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          maxLength={500}
+          placeholder="What if I also… / What if I had…"
+          className="block w-full rounded-xl bg-transparent px-3 py-2.5 text-lg text-fg placeholder:text-fg-mute focus:outline-none"
+        />
+      </div>
+      <div className="mt-3 flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={loading}
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-cyan to-violet px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(34,211,238,0.7)] transition-all hover:brightness-110 disabled:opacity-60"
+        >
+          {loading ? "Re-simulating…" : "Re-simulate →"}
+        </button>
+        {error && <span className="text-sm text-magenta">{error}</span>}
+      </div>
+    </form>
   );
 }
 

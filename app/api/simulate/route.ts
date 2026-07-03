@@ -34,6 +34,10 @@ export async function POST(req: NextRequest) {
   const input = typeof body?.input === "string" ? body.input : "";
   const trimmedLen = input.trim().length;
   const context = sanitizeContext(body?.context);
+  const refinement =
+    typeof body?.refinement === "string" && body.refinement.trim()
+      ? body.refinement.trim().slice(0, 500)
+      : undefined;
 
   // Resolve identity now so we can log validation failures consistently.
   const anon = getAnonIdentity(req);
@@ -59,6 +63,28 @@ export async function POST(req: NextRequest) {
       res.cookies.set(anon.cookieToSet.name, anon.cookieToSet.value, anon.cookieToSet.options);
     }
     return res;
+  }
+
+  // Refine & branch is a subscriber feature. Fail-open in demo mode (no Supabase),
+  // consistent with the rest of the app.
+  if (refinement) {
+    const demoMode = !process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const isSubscriber =
+      actor.kind === "user" && (actor.plan === "pro" || actor.plan === "creator");
+    if (!demoMode && !isSubscriber) {
+      await logUsage({
+        actor,
+        ipHash: anon.ipHash,
+        inputLength: input.length,
+        blockedReason: "refine_requires_pro",
+      });
+      return applyCookie(
+        NextResponse.json(
+          { error: "upgrade_required", feature: "refine" },
+          { status: 402 },
+        ),
+      );
+    }
   }
 
   if (trimmedLen < MIN_INPUT) {
@@ -127,7 +153,7 @@ export async function POST(req: NextRequest) {
 
   // -------- Step 3: run the simulation --------
   try {
-    const result = await simulateDecision(input, context);
+    const result = await simulateDecision(input, context, refinement);
 
     // -------- Step 4: log the accepted usage (counts toward 24h cap) --------
     await logUsage({

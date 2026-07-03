@@ -11,6 +11,7 @@ export const isLive = Boolean(client);
 export async function simulateDecision(
   input: string,
   ctx?: DecisionContext,
+  refinement?: string,
 ): Promise<SimulationResult> {
   if (!client) {
     return demoSimulation(input);
@@ -22,7 +23,7 @@ export async function simulateDecision(
     temperature: 0.7,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: decisionPrompt(input, ctx) },
+      { role: "user", content: decisionPrompt(input, ctx, refinement) },
     ],
   });
 
