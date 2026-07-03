@@ -208,13 +208,16 @@ export default function SimulateForm() {
                 <span className="font-mono text-xs text-fg-mute">
                   {input.length} / 1500
                 </span>
-                <button
-                  type="submit"
-                  className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-violet via-violet to-magenta px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(168,85,247,0.85)] transition-all hover:brightness-110 hover:shadow-[0_12px_50px_-8px_rgba(168,85,247,1)]"
-                >
-                  <span>{compareMode ? "Compare paths" : "Simulate"}</span>
-                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
-                </button>
+                {/* Single mode: submit lives here. Compare mode: submit moves below Path B. */}
+                {!compareMode && (
+                  <button
+                    type="submit"
+                    className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-violet via-violet to-magenta px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(168,85,247,0.85)] transition-all hover:brightness-110 hover:shadow-[0_12px_50px_-8px_rgba(168,85,247,1)]"
+                  >
+                    <span>Simulate</span>
+                    <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -235,6 +238,15 @@ export default function SimulateForm() {
                   <div className="border-t border-border/60 px-4 py-3">
                     <span className="font-mono text-xs text-fg-mute">{inputB.length} / 1500</span>
                   </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <button
+                    type="submit"
+                    className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-violet via-violet to-magenta px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_30px_-8px_rgba(168,85,247,0.85)] transition-all hover:brightness-110 hover:shadow-[0_12px_50px_-8px_rgba(168,85,247,1)]"
+                  >
+                    <span>Compare paths</span>
+                    <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                  </button>
                 </div>
               </>
             )}
