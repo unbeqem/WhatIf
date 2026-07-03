@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 import UpgradeButton from "@/components/UpgradeButton";
 import ShareCard from "@/components/ShareCard";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
-import type { SimulationResult, Scenario } from "@/lib/types";
+import type { SimulationResult, Scenario, LockedInsight } from "@/lib/types";
 
 type Stored = { input: string; result: SimulationResult; ts: number };
 
@@ -155,8 +155,13 @@ export default function ResultView() {
         </div>
       </motion.div>
 
-      {/* Actions (+ upsell for non-subscribers + Share/Creator export) */}
-      <div className={`grid gap-4 ${showUpsell ? "md:grid-cols-3" : me ? "md:grid-cols-2" : ""}`}>
+      {/* The held-back insight — revealed for subscribers, blurred paywall for everyone else */}
+      {result.locked_insight && (
+        <LockedInsightBlock insight={result.locked_insight} locked={showUpsell} />
+      )}
+
+      {/* Actions + Share/Creator export */}
+      <div className={`grid gap-4 ${me ? "md:grid-cols-2" : ""}`}>
         <Link
           href="/decision"
           className="group inline-flex items-center justify-between rounded-2xl border border-border bg-surface/40 p-5 transition-colors hover:border-border-hi hover:bg-surface-hi"
@@ -172,44 +177,68 @@ export default function ResultView() {
           </span>
         </Link>
 
-        {showUpsell && (
-          <div className="relative overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-5 md:col-span-2">
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-violet-glow">
-              Soft paywall
-            </div>
-            <div className="mt-1 font-display text-xl leading-tight">
-              Want to see the version of this answer{" "}
-              <span className="italic text-fg-soft">we held back</span>?
+        <ShareCard input={input} result={result} me={me} />
+      </div>
+    </div>
+  );
+}
+
+function LockedInsightBlock({
+  insight,
+  locked,
+}: {
+  insight: LockedInsight;
+  locked: boolean;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6 }}
+      className="relative overflow-hidden rounded-3xl border border-amber/40 bg-gradient-to-br from-amber/10 via-surface/60 to-magenta/5 p-7 md:p-10"
+    >
+      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-amber">
+        The part most people miss
+      </div>
+
+      <div
+        className={locked ? "pointer-events-none select-none blur-[9px]" : ""}
+        aria-hidden={locked}
+      >
+        <p className="font-display text-3xl leading-tight text-fg md:text-4xl">
+          {insight.headline}
+        </p>
+        <p className="mt-4 text-fg-soft">{insight.detail}</p>
+      </div>
+
+      {locked && (
+        <div className="absolute inset-0 grid place-items-center bg-bg/30 p-6 backdrop-blur-[2px]">
+          <div className="w-full max-w-sm text-center">
+            <div className="font-display text-2xl leading-tight">
+              The version of this answer{" "}
+              <span className="italic text-fg-soft">we held back</span>.
             </div>
             <p className="mt-2 text-sm text-fg-soft">
-              Pro unlocks the deeper second-order effects, the kill-switch metric, and history of
-              every decision you've simulated.
+              Unlock the second-order insight most people in your position miss — plus history of
+              every decision you simulate.
             </p>
-            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className="flex-1">
-                <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
-              </div>
+            <div className="mx-auto mt-5 max-w-xs space-y-2">
+              <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
               <Link
                 href="/#pricing"
-                className="inline-flex items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-3 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
+                className="inline-flex w-full items-center justify-center rounded-xl border border-border-hi bg-bg/40 px-4 py-2.5 text-sm text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
               >
                 Compare plans
               </Link>
+              <p className="text-[11px] text-fg-mute">
+                Testphase · Zahlungen im Testmodus, keine echte Abbuchung
+              </p>
             </div>
-            <p className="mt-2 text-center text-[11px] text-fg-mute">
-              Testphase · Zahlungen im Testmodus, keine echte Abbuchung
-            </p>
           </div>
-        )}
-
-        <ShareCard
-          input={input}
-          result={result}
-          me={me}
-          className={showUpsell ? "md:col-span-3" : ""}
-        />
-      </div>
-    </div>
+        </div>
+      )}
+    </motion.div>
   );
 }
 

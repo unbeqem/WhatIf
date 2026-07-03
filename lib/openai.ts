@@ -61,5 +61,10 @@ function demoSimulation(input: string): SimulationResult {
     most_likely: `The middle scenario is most probable for decisions framed like "${trimmed}". Big choices rarely deliver their promised drama — the outcome is usually shaped by what you do in the dull months after the leap, not the leap itself.`,
     recommendation: "Run the decision, but pre-commit to a 90-day review with one trusted person and a single quantitative trigger that would force you to reverse it. The decision matters less than the kill-switch.",
     reasoning: "Most people fail not because they chose wrong but because they refused to notice when reality diverged from the plan. A pre-committed checkpoint is cheap insurance against ego-driven persistence.",
+    locked_insight: {
+      headline: "68% chance the real regret is waiting, not choosing",
+      detail:
+        "For decisions like this, people rarely regret the action itself — they regret the months of limbo before it. The hidden cost isn't the wrong choice; it's how long you let the question run your life while you avoid deciding.",
+    },
   };
 }
