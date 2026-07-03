@@ -156,6 +156,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260703-f0m | Compare/context toggles redesigned as visible full-width option rows (were near-invisible muted text) | 2026-07-03 | 48110a8 | [260703-f0m-redesign-compare-context-toggles-as-full](./quick/260703-f0m-redesign-compare-context-toggles-as-full/) |
 | 260703-fdy | Brand favicon (app/icon.svg + apple-icon) + TikTok profile picture (public/whatif-tiktok.png) | 2026-07-03 | da0d278 | [260703-fdy-brand-mark-favicon-tab-icon-tiktok-profi](./quick/260703-fdy-brand-mark-favicon-tab-icon-tiktok-profi/) |
 | 260703-fmi | Move compare submit button below Path B (was misplaced in Path A footer) | 2026-07-03 | 10d4e2b | [260703-fmi-move-compare-submit-button-below-path-b](./quick/260703-fmi-move-compare-submit-button-below-path-b/) |
+| 260703-k5w | Harden simulate pipeline vs malformed LLM output (blank /result page); validation + error boundary + client timeout | 2026-07-03 | 79cb8b8 | [260703-k5w-harden-simulate-pipeline-against-malform](./quick/260703-k5w-harden-simulate-pipeline-against-malform/) |
 
 ## Session Continuity
 
