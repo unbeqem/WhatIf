@@ -359,7 +359,24 @@ function LockedInsightBlock({
   );
 }
 
+function pathScore(result: SimulationResult): number {
+  let best = 0;
+  let worst = 0;
+  for (const s of result.scenarios) {
+    const p = Math.max(0, Math.min(100, Math.round(s.probability ?? 0)));
+    if (s.tag === "Best Case") best = p;
+    else if (s.tag === "Worst Case") worst = p;
+  }
+  return best - worst;
+}
+
 function ComparisonView({ data }: { data: StoredCompare }) {
+  const scoreA = pathScore(data.a.result);
+  const scoreB = pathScore(data.b.result);
+  // Only call a winner when the gap is meaningful, else it reads as false precision.
+  const winner: "a" | "b" | null =
+    Math.abs(scoreA - scoreB) < 5 ? null : scoreA > scoreB ? "a" : "b";
+
   return (
     <div className="space-y-10">
       <motion.div
@@ -375,8 +392,8 @@ function ComparisonView({ data }: { data: StoredCompare }) {
       </motion.div>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <CompareColumn label="Path A" accent="cyan" entry={data.a} idx={0} />
-        <CompareColumn label="Path B" accent="magenta" entry={data.b} idx={1} />
+        <CompareColumn label="Path A" accent="cyan" entry={data.a} idx={0} highlighted={winner === "a"} />
+        <CompareColumn label="Path B" accent="magenta" entry={data.b} idx={1} highlighted={winner === "b"} />
       </div>
 
       <div className="flex justify-center">
@@ -396,11 +413,13 @@ function CompareColumn({
   accent,
   entry,
   idx,
+  highlighted = false,
 }: {
   label: string;
   accent: "cyan" | "magenta";
   entry: { input: string; result: SimulationResult };
   idx: number;
+  highlighted?: boolean;
 }) {
   const accentText = accent === "cyan" ? "text-cyan-glow" : "text-magenta";
   const accentBorder = accent === "cyan" ? "border-cyan/30" : "border-magenta/30";
@@ -411,11 +430,22 @@ function CompareColumn({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 + idx * 0.1 }}
-      className={`flex flex-col gap-5 rounded-3xl border ${accentBorder} bg-surface/40 p-6`}
+      className={`flex flex-col gap-5 rounded-3xl border bg-surface/40 p-6 ${
+        highlighted
+          ? "border-violet-glow/60 shadow-[0_0_44px_-12px_rgba(168,85,247,0.6)]"
+          : accentBorder
+      }`}
     >
       <div>
-        <div className={`font-mono text-[10px] uppercase tracking-[0.22em] ${accentText}`}>
-          {label}
+        <div className="flex items-center gap-2">
+          <div className={`font-mono text-[10px] uppercase tracking-[0.22em] ${accentText}`}>
+            {label}
+          </div>
+          {highlighted && (
+            <span className="rounded-full border border-violet-glow/50 bg-violet/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-violet-glow">
+              Better odds
+            </span>
+          )}
         </div>
         <p className="mt-1 font-display text-xl italic leading-snug">&ldquo;{entry.input}&rdquo;</p>
       </div>
