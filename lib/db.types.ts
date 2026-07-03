@@ -64,6 +64,8 @@ export type Database = {
           result: Json;
           summary: string | null;
           created_at: string;
+          follow_up_sent_at: string | null;
+          follow_up_response: string | null;
         };
         Insert: {
           user_id: string;
@@ -73,6 +75,8 @@ export type Database = {
         };
         Update: Partial<{
           summary: string | null;
+          follow_up_sent_at: string | null;
+          follow_up_response: string | null;
         }>;
         Relationships: [];
       };
