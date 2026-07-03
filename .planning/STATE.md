@@ -153,6 +153,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260702-p2k | Email-verified success page (/verified) + auto-redirect + expired-link state | 2026-07-02 | 0acb9bc | [260702-p2k-verified-success-page](./quick/260702-p2k-verified-success-page/) |
 | 260702-r5t | Decision history for Pro/Creator (migration 0004 + /history + write on simulate) | 2026-07-02 | 315eb90 | [260702-r5t-decision-history](./quick/260702-r5t-decision-history/) |
 | 260703-eum | Clearer auth errors — weak_password (exact rule) / email_not_confirmed / email_exists instead of generic 500 | 2026-07-03 | 28c2b4f | [260703-eum-clearer-auth-error-handling-weak-passwor](./quick/260703-eum-clearer-auth-error-handling-weak-passwor/) |
+| 260703-f0m | Compare/context toggles redesigned as visible full-width option rows (were near-invisible muted text) | 2026-07-03 | 48110a8 | [260703-f0m-redesign-compare-context-toggles-as-full](./quick/260703-f0m-redesign-compare-context-toggles-as-full/) |
 
 ## Session Continuity
 
