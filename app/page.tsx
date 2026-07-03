@@ -3,6 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import DemoPreview from "@/components/DemoPreview";
+import HeroPreview from "@/components/HeroPreview";
 import PricingCta from "@/components/PricingCta";
 import FinalCta from "@/components/FinalCta";
 import Testimonials from "@/components/Testimonials";
@@ -117,6 +118,8 @@ export default function Home() {
                 See a live example
               </a>
             </div>
+
+            <HeroPreview />
 
             <div className="mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
               {COUNTERS.map((c) => (
