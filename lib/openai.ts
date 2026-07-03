@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { SYSTEM_PROMPT, decisionPrompt } from "./prompts";
+import { isValidSimulation } from "./validate-simulation";
 import type { SimulationResult, DecisionContext } from "./types";
 
 const apiKey = process.env.OPENAI_API_KEY;
@@ -28,7 +29,17 @@ export async function simulateDecision(
   });
 
   const raw = completion.choices[0]?.message?.content ?? "{}";
-  const parsed = JSON.parse(raw) as SimulationResult;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new Error("simulation: model returned non-JSON");
+  }
+  // Never hand an unrenderable shape downstream — the /result page maps over
+  // scenarios and would blank out. Fail here so the caller returns a clean error.
+  if (!isValidSimulation(parsed)) {
+    throw new Error("simulation: model returned an unexpected shape");
+  }
   return parsed;
 }
 

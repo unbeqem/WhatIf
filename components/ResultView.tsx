@@ -7,6 +7,7 @@ import { TrendingUp, Minus, TrendingDown, type LucideIcon } from "lucide-react";
 import UpgradeButton from "@/components/UpgradeButton";
 import ShareCard from "@/components/ShareCard";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
+import { isValidSimulation } from "@/lib/validate-simulation";
 import type { SimulationResult, Scenario, LockedInsight } from "@/lib/types";
 
 type StoredSingle = { input: string; result: SimulationResult; ts: number };
@@ -146,6 +147,24 @@ export default function ResultView() {
   }
 
   const { input, result } = data;
+
+  if (!isValidSimulation(result)) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-surface/40 p-12 text-center">
+        <h2 className="font-display text-3xl">That one didn&apos;t come through.</h2>
+        <p className="mt-3 text-fg-soft">
+          The oracle&apos;s answer was unreadable. Ask again — it usually works on the next try.
+        </p>
+        <Link
+          href="/decision"
+          className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-violet to-magenta px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_40px_-10px_rgba(168,85,247,0.7)]"
+        >
+          Try again →
+        </Link>
+      </div>
+    );
+  }
+
   const isDemo = Boolean(result.demo);
 
   return (

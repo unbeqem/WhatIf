@@ -7,6 +7,7 @@ import { Scale, Sparkles, Plus, Minus } from "lucide-react";
 import PaywallNotice from "@/components/PaywallNotice";
 import UpgradeButton from "@/components/UpgradeButton";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
+import { isValidSimulation } from "@/lib/validate-simulation";
 
 const EXAMPLES = [
   "Should I quit my stable job to go all-in on my side project?",
@@ -69,22 +70,36 @@ export default function SimulateForm() {
     | { kind: "error"; msg: string };
 
   async function runOne(text: string): Promise<RunResult> {
-    const res = await fetch("/api/simulate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input: text, context: { ageRange, priority, riskTolerance } }),
-    });
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 429 && data.error === "limit_reached") {
-        return { kind: "limit", limit: data.limit === "free_daily" ? "free_daily" : "anon_daily" };
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 40000);
+    try {
+      const res = await fetch("/api/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: text, context: { ageRange, priority, riskTolerance } }),
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 429 && data.error === "limit_reached") {
+          return { kind: "limit", limit: data.limit === "free_daily" ? "free_daily" : "anon_daily" };
+        }
+        if (res.status === 429 && data.error === "rate_limited") {
+          return { kind: "rate", sec: data.retryAfterSec ?? 60 };
+        }
+        return { kind: "error", msg: data.error ?? "Something went wrong. Try again." };
       }
-      if (res.status === 429 && data.error === "rate_limited") {
-        return { kind: "rate", sec: data.retryAfterSec ?? 60 };
+      // Guard against a 200 with an unrenderable body — storing it would blank /result.
+      const data = await res.json().catch(() => null);
+      if (!isValidSimulation(data)) {
+        return { kind: "error", msg: "The oracle returned something unreadable. Please try again." };
       }
-      return { kind: "error", msg: data.error ?? "Something went wrong. Try again." };
+      return { kind: "ok", data };
+    } catch {
+      return { kind: "error", msg: "That took too long or the connection dropped. Try again." };
+    } finally {
+      clearTimeout(timer);
     }
-    return { kind: "ok", data: await res.json() };
   }
 
   function applyFail(r: Exclude<RunResult, { kind: "ok" }>) {
