@@ -8,7 +8,18 @@ import ShareCard from "@/components/ShareCard";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
 import type { SimulationResult, Scenario, LockedInsight } from "@/lib/types";
 
-type Stored = { input: string; result: SimulationResult; ts: number };
+type StoredSingle = { input: string; result: SimulationResult; ts: number };
+type StoredCompare = {
+  mode: "compare";
+  ts: number;
+  a: { input: string; result: SimulationResult };
+  b: { input: string; result: SimulationResult };
+};
+type Stored = StoredSingle | StoredCompare;
+
+function isCompare(d: Stored): d is StoredCompare {
+  return "mode" in d && d.mode === "compare";
+}
 
 const TAG_STYLES: Record<string, { ring: string; bar: string; chip: string; label: string }> = {
   "Best Case": {
@@ -76,6 +87,10 @@ export default function ResultView() {
         </Link>
       </div>
     );
+  }
+
+  if (isCompare(data)) {
+    return <ComparisonView data={data} />;
   }
 
   const { input, result } = data;
@@ -267,6 +282,98 @@ function LockedInsightBlock({
           </div>
         </div>
       )}
+    </motion.div>
+  );
+}
+
+function ComparisonView({ data }: { data: StoredCompare }) {
+  return (
+    <div className="space-y-10">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
+        <h2 className="font-display text-3xl md:text-4xl">Two paths, side by side</h2>
+        <p className="mt-2 text-fg-soft">
+          The same lens on both options — compare the odds and the calls.
+        </p>
+      </motion.div>
+
+      <div className="grid gap-5 md:grid-cols-2">
+        <CompareColumn label="Path A" accent="cyan" entry={data.a} idx={0} />
+        <CompareColumn label="Path B" accent="magenta" entry={data.b} idx={1} />
+      </div>
+
+      <div className="flex justify-center">
+        <Link
+          href="/decision"
+          className="inline-flex items-center gap-2 rounded-xl border border-border-hi bg-surface/40 px-5 py-3 text-sm font-semibold text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
+        >
+          Ask another question →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function CompareColumn({
+  label,
+  accent,
+  entry,
+  idx,
+}: {
+  label: string;
+  accent: "cyan" | "magenta";
+  entry: { input: string; result: SimulationResult };
+  idx: number;
+}) {
+  const accentText = accent === "cyan" ? "text-cyan-glow" : "text-magenta";
+  const accentBorder = accent === "cyan" ? "border-cyan/30" : "border-magenta/30";
+  const scenarios = entry.result.scenarios.slice(0, 3);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 + idx * 0.1 }}
+      className={`flex flex-col gap-5 rounded-3xl border ${accentBorder} bg-surface/40 p-6`}
+    >
+      <div>
+        <div className={`font-mono text-[10px] uppercase tracking-[0.22em] ${accentText}`}>
+          {label}
+        </div>
+        <p className="mt-1 font-display text-xl italic leading-snug">&ldquo;{entry.input}&rdquo;</p>
+      </div>
+
+      <div className="space-y-4">
+        {scenarios.map((s, i) => {
+          const st = styleFor(s.tag);
+          const pct = Math.max(0, Math.min(100, Math.round(s.probability ?? 0)));
+          return (
+            <div key={i}>
+              <div className="mb-1 flex items-center justify-between">
+                <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
+                  {st.label}
+                </span>
+                <span className="font-mono text-xs text-fg-mute">{pct}%</span>
+              </div>
+              <div className="h-1 w-full overflow-hidden rounded-full bg-bg/60">
+                <div className={`h-full rounded-full bg-gradient-to-r ${st.bar}`} style={{ width: `${pct}%` }} />
+              </div>
+              <p className="mt-1.5 font-display text-lg leading-tight">{s.title}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-auto border-t border-border/60 pt-4">
+        <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.22em] text-violet-glow">
+          The call
+        </div>
+        <p className="text-sm leading-relaxed text-fg-soft">{entry.result.recommendation}</p>
+      </div>
     </motion.div>
   );
 }
