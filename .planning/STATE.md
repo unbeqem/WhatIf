@@ -155,6 +155,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260703-eum | Clearer auth errors — weak_password (exact rule) / email_not_confirmed / email_exists instead of generic 500 | 2026-07-03 | 28c2b4f | [260703-eum-clearer-auth-error-handling-weak-passwor](./quick/260703-eum-clearer-auth-error-handling-weak-passwor/) |
 | 260703-f0m | Compare/context toggles redesigned as visible full-width option rows (were near-invisible muted text) | 2026-07-03 | 48110a8 | [260703-f0m-redesign-compare-context-toggles-as-full](./quick/260703-f0m-redesign-compare-context-toggles-as-full/) |
 | 260703-fdy | Brand favicon (app/icon.svg + apple-icon) + TikTok profile picture (public/whatif-tiktok.png) | 2026-07-03 | da0d278 | [260703-fdy-brand-mark-favicon-tab-icon-tiktok-profi](./quick/260703-fdy-brand-mark-favicon-tab-icon-tiktok-profi/) |
+| 260703-fmi | Move compare submit button below Path B (was misplaced in Path A footer) | 2026-07-03 | 10d4e2b | [260703-fmi-move-compare-submit-button-below-path-b](./quick/260703-fmi-move-compare-submit-button-below-path-b/) |
 
 ## Session Continuity
 
