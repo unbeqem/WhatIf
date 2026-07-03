@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { TrendingUp, Minus, TrendingDown, type LucideIcon } from "lucide-react";
 import UpgradeButton from "@/components/UpgradeButton";
 import ShareCard from "@/components/ShareCard";
@@ -55,6 +55,46 @@ function styleFor(tag: string) {
 
 function iconFor(tag: string): LucideIcon {
   return TAG_ICONS[tag] ?? Minus;
+}
+
+// Animates an integer from 0 → `to` on mount (easeOutCubic). Respects reduced motion.
+function CountUp({
+  to,
+  duration = 900,
+  delay = 0,
+  className,
+}: {
+  to: number;
+  duration?: number;
+  delay?: number;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const [val, setVal] = useState(reduce ? to : 0);
+
+  useEffect(() => {
+    if (reduce) {
+      setVal(to);
+      return;
+    }
+    let raf = 0;
+    let start: number | null = null;
+    const timer = setTimeout(() => {
+      const tick = (t: number) => {
+        if (start === null) start = t;
+        const p = Math.min(1, (t - start) / duration);
+        setVal(Math.round(to * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }, delay);
+    return () => {
+      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+    };
+  }, [to, duration, delay, reduce]);
+
+  return <span className={className}>{val}</span>;
 }
 
 export default function ResultView() {
@@ -505,22 +545,29 @@ function ScenarioCard({ scenario, idx }: { scenario: Scenario; idx: number }) {
     >
       <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${st.ring}`} />
 
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-2 flex items-center justify-between">
         <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
           <Icon className="h-3 w-3" />
           {st.label}
         </span>
-        <span className="font-mono text-xs text-fg-mute">{pct}%</span>
+        <div className="flex items-baseline">
+          <CountUp
+            to={pct}
+            delay={400 + idx * 120}
+            className="font-display text-4xl leading-none text-fg tabular-nums"
+          />
+          <span className="font-display text-xl text-fg-mute">%</span>
+        </div>
       </div>
 
       <h3 className="font-display text-2xl leading-tight">{scenario.title}</h3>
 
-      <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-bg/60">
+      <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-bg/60">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.9, delay: 0.4 + idx * 0.12, ease: "easeOut" }}
-          className={`h-full rounded-full bg-gradient-to-r ${st.bar} shadow-[0_0_12px_rgba(192,132,252,0.5)]`}
+          className={`h-full rounded-full bg-gradient-to-r ${st.bar} shadow-[0_0_16px_rgba(192,132,252,0.6)]`}
         />
       </div>
 
