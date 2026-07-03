@@ -54,44 +54,23 @@ describe("isValidExportPayload", () => {
 });
 
 describe("exportGateDecision", () => {
-  it("allows creator plan", () => {
-    expect(exportGateDecision("creator", false)).toEqual({ ok: true });
+  it("allows creator plan with a clean (unwatermarked) card", () => {
+    expect(exportGateDecision("creator", false)).toEqual({ ok: true, watermark: false });
   });
 
-  it("blocks free plan with 402 upsell", () => {
-    const result = exportGateDecision("free", false);
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.status).toBe(402);
-      expect(result.body).toEqual({
-        error: "upgrade_required",
-        plan: "free",
-        upsell: { target: "creator", price: "€9/mo", href: "/#pricing" },
-      });
-    }
+  it("allows free plan but watermarks the card", () => {
+    expect(exportGateDecision("free", false)).toEqual({ ok: true, watermark: true });
   });
 
-  it("blocks pro plan with 402", () => {
-    const result = exportGateDecision("pro", false);
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.status).toBe(402);
-      expect(result.body.plan).toBe("pro");
-    }
+  it("allows pro plan but watermarks (clean export is Creator-only)", () => {
+    expect(exportGateDecision("pro", false)).toEqual({ ok: true, watermark: true });
   });
 
-  it("allows null plan when demoMode is true", () => {
-    expect(exportGateDecision(null, true)).toEqual({ ok: true });
+  it("treats demo mode as creator — clean card so marketing footage stays unbranded", () => {
+    expect(exportGateDecision(null, true)).toEqual({ ok: true, watermark: false });
   });
 
-  it("blocks null plan with plan 'free' when demoMode is false", () => {
-    const result = exportGateDecision(null, false);
-    expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.status).toBe(402);
-      expect(result.body.plan).toBe("free");
-      expect(result.body.upsell.target).toBe("creator");
-      expect(result.body.upsell.href).toBe("/#pricing");
-    }
+  it("watermarks a null plan when demoMode is false", () => {
+    expect(exportGateDecision(null, false)).toEqual({ ok: true, watermark: true });
   });
 });

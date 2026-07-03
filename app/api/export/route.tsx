@@ -43,9 +43,6 @@ export async function POST(req: NextRequest) {
   }
 
   const gate = exportGateDecision(plan, demoMode);
-  if (!gate.ok) {
-    return NextResponse.json(gate.body, { status: gate.status });
-  }
 
   try {
     const [inter, serif] = await Promise.all([
@@ -53,7 +50,7 @@ export async function POST(req: NextRequest) {
       readFile(join(process.cwd(), "assets/InstrumentSerif-Regular.ttf")),
     ]);
 
-    return new ImageResponse(<StoryCard input={input} result={result} />, {
+    return new ImageResponse(<StoryCard input={input} result={result} watermark={gate.watermark} />, {
       width: 1080,
       height: 1920,
       fonts: [

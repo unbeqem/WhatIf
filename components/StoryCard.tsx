@@ -12,9 +12,9 @@ function styleFor(tag: string): TagStyle {
   return TAG_STYLES[tag] ?? TAG_STYLES.Likely;
 }
 
-type Props = { input: string; result: SimulationResult };
+type Props = { input: string; result: SimulationResult; watermark?: boolean };
 
-export default function StoryCard({ input, result }: Props) {
+export default function StoryCard({ input, result, watermark = false }: Props) {
   const scenarios = result.scenarios.slice(0, 3);
 
   return (
@@ -178,19 +178,42 @@ export default function StoryCard({ input, result }: Props) {
         </div>
       </div>
 
-      {/* Footer band */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          fontFamily: "Inter",
-          fontWeight: 600,
-          fontSize: 28,
-          color: "#c9c6e6",
-        }}
-      >
-        what-if.tech — simulate your decision
-      </div>
+      {/* Footer band — Creator gets a clean tagline; everyone else gets a branded badge */}
+      {watermark ? (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              padding: "18px 34px",
+              borderRadius: 999,
+              border: "2px solid rgba(192,132,252,0.5)",
+              backgroundColor: "rgba(168,85,247,0.14)",
+              fontFamily: "Inter",
+              fontWeight: 600,
+              fontSize: 30,
+              color: "#f5f3ff",
+            }}
+          >
+            <span>Simulated on WhatIf · what-if.tech</span>
+            <span style={{ color: "#c084fc" }}>→</span>
+          </div>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontFamily: "Inter",
+            fontWeight: 600,
+            fontSize: 28,
+            color: "#c9c6e6",
+          }}
+        >
+          what-if.tech — simulate your decision
+        </div>
+      )}
     </div>
   );
 }

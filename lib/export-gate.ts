@@ -1,14 +1,6 @@
-export type ExportGate =
-  | { ok: true }
-  | {
-      ok: false;
-      status: 402;
-      body: {
-        error: "upgrade_required";
-        plan: string;
-        upsell: { target: "creator"; price: "€9/mo"; href: "/#pricing" };
-      };
-    };
+// Everyone can export a card — that IS the acquisition loop. Only Creator gets the
+// clean, unbranded card; everyone else gets a watermarked one that advertises WhatIf.
+export type ExportGate = { ok: true; watermark: boolean };
 
 export const EXPORT_MIN_INPUT = 8;
 export const EXPORT_MAX_INPUT = 1500;
@@ -40,16 +32,9 @@ export function isValidExportPayload(input: unknown, result: unknown): boolean {
   return r.scenarios.every(isRenderableScenario);
 }
 
-// demoMode === true means Supabase is unconfigured -> allow (treat as creator), per lib/quota fail-open.
+// demoMode === true means Supabase is unconfigured -> treat as creator (clean card) so
+// marketing footage stays unbranded, per lib/quota fail-open discipline.
 export function exportGateDecision(plan: string | null, demoMode: boolean): ExportGate {
-  if (demoMode || plan === "creator") return { ok: true };
-  return {
-    ok: false,
-    status: 402,
-    body: {
-      error: "upgrade_required",
-      plan: plan ?? "free",
-      upsell: { target: "creator", price: "€9/mo", href: "/#pricing" },
-    },
-  };
+  const clean = demoMode || plan === "creator";
+  return { ok: true, watermark: !clean };
 }
