@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { TrendingUp, Minus, TrendingDown, type LucideIcon } from "lucide-react";
 import UpgradeButton from "@/components/UpgradeButton";
 import ShareCard from "@/components/ShareCard";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
@@ -42,8 +43,18 @@ const TAG_STYLES: Record<string, { ring: string; bar: string; chip: string; labe
   },
 };
 
+const TAG_ICONS: Record<string, LucideIcon> = {
+  "Best Case": TrendingUp,
+  Likely: Minus,
+  "Worst Case": TrendingDown,
+};
+
 function styleFor(tag: string) {
   return TAG_STYLES[tag] ?? TAG_STYLES.Likely;
+}
+
+function iconFor(tag: string): LucideIcon {
+  return TAG_ICONS[tag] ?? Minus;
 }
 
 export default function ResultView() {
@@ -350,11 +361,13 @@ function CompareColumn({
       <div className="space-y-4">
         {scenarios.map((s, i) => {
           const st = styleFor(s.tag);
+          const Icon = iconFor(s.tag);
           const pct = Math.max(0, Math.min(100, Math.round(s.probability ?? 0)));
           return (
             <div key={i}>
               <div className="mb-1 flex items-center justify-between">
-                <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
+                <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
+                  <Icon className="h-3 w-3" />
                   {st.label}
                 </span>
                 <span className="font-mono text-xs text-fg-mute">{pct}%</span>
@@ -480,6 +493,7 @@ function RefineBox({
 
 function ScenarioCard({ scenario, idx }: { scenario: Scenario; idx: number }) {
   const st = styleFor(scenario.tag);
+  const Icon = iconFor(scenario.tag);
   const pct = Math.max(0, Math.min(100, Math.round(scenario.probability ?? 0)));
 
   return (
@@ -492,7 +506,8 @@ function ScenarioCard({ scenario, idx }: { scenario: Scenario; idx: number }) {
       <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${st.ring}`} />
 
       <div className="mb-3 flex items-center justify-between">
-        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
+        <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ${st.chip}`}>
+          <Icon className="h-3 w-3" />
           {st.label}
         </span>
         <span className="font-mono text-xs text-fg-mute">{pct}%</span>
