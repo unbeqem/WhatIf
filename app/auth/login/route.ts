@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { parseCredentials } from "@/lib/auth/validate";
+import { interpretAuthError } from "@/lib/auth/error-map";
 
 export const runtime = "nodejs";
 
@@ -19,14 +20,19 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.auth.signInWithPassword(parsed.value);
 
   if (error) {
-    // Supabase returns 400 for bad creds — normalize to 401.
-    if (error.status === 400 || error.status === 401) {
-      return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
+    const mapped = interpretAuthError(error);
+    // Unconfirmed email is a common real cause — tell the user precisely.
+    if (mapped.code === "email_not_confirmed") {
+      return NextResponse.json({ error: "email_not_confirmed" }, { status: mapped.status });
     }
-    if (error.status === 429) {
+    if (mapped.code === "rate_limited") {
       return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }
-    console.error("[auth/login] error", error.message);
+    // Bad creds (Supabase 400) normalize to 401.
+    if (mapped.code === "invalid_credentials") {
+      return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
+    }
+    console.error("[auth/login] error", error.status, error.code, error.message);
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 

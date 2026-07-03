@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { parsePassword } from "@/lib/auth/validate";
+import { interpretAuthError } from "@/lib/auth/error-map";
 
 export const runtime = "nodejs";
 
@@ -23,13 +24,17 @@ export async function POST(req: NextRequest) {
 
   const { error } = await supabase.auth.updateUser({ password: parsed.value.password });
   if (error) {
-    if (error.status === 422) {
+    const mapped = interpretAuthError(error);
+    if (mapped.code === "weak_password") {
       return NextResponse.json(
-        { error: "invalid_input", field: "password" },
-        { status: 400 },
+        { error: "weak_password", message: mapped.message },
+        { status: mapped.status },
       );
     }
-    console.error("[auth/reset-confirm] error", error.message);
+    if (mapped.code === "rate_limited") {
+      return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    }
+    console.error("[auth/reset-confirm] error", error.status, error.code, error.message);
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 

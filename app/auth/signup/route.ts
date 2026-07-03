@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { parseCredentials } from "@/lib/auth/validate";
+import { interpretAuthError } from "@/lib/auth/error-map";
 
 export const runtime = "nodejs";
 
@@ -29,10 +30,20 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    if (error.status === 429) {
+    const mapped = interpretAuthError(error);
+    if (mapped.code === "weak_password") {
+      return NextResponse.json(
+        { error: "weak_password", message: mapped.message },
+        { status: mapped.status },
+      );
+    }
+    if (mapped.code === "email_exists") {
+      return NextResponse.json({ error: "email_exists" }, { status: mapped.status });
+    }
+    if (mapped.code === "rate_limited") {
       return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     }
-    console.error("[auth/signup] error", error.message);
+    console.error("[auth/signup] error", error.status, error.code, error.message);
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 

@@ -13,6 +13,9 @@ type Props = {
 
 const ERROR_COPY: Record<string, string> = {
   invalid_credentials: "Wrong email or password.",
+  weak_password: "That password is too weak.",
+  email_not_confirmed: "Confirm your email first — check your inbox for the link.",
+  email_exists: "That email already has an account. Try logging in instead.",
   auth_unavailable: "Auth is in demo mode. Configure Supabase in .env.local to enable accounts.",
   rate_limited: "Too many attempts. Wait a minute and try again.",
   server_error: "Something went wrong. Try again in a moment.",
@@ -59,7 +62,10 @@ export default function AuthForm({ mode, endpoint, submitLabel, onSuccess }: Pro
             : "Password must be at least 8 characters.",
         );
       } else {
-        setGeneralError(ERROR_COPY[data.error] ?? "Something went wrong.");
+        if (data.error === "weak_password") setFieldError("password");
+        else if (data.error === "email_exists") setFieldError("email");
+        // Prefer the server's specific reason (e.g. the exact weak-password rule).
+        setGeneralError(data.message ?? ERROR_COPY[data.error] ?? "Something went wrong.");
       }
     } catch {
       setGeneralError("Connection failed. Check your network.");
