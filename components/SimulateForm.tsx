@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { Scale, Sparkles, Plus, Minus } from "lucide-react";
 import PaywallNotice from "@/components/PaywallNotice";
 import UpgradeButton from "@/components/UpgradeButton";
 import { useMe, isSubscriberPlan } from "@/lib/useMe";
@@ -238,9 +239,13 @@ export default function SimulateForm() {
               </>
             )}
 
-            <div className="mt-4">
-              <button
-                type="button"
+            <div className="mt-4 divide-y divide-border/60 overflow-hidden rounded-2xl border border-border bg-surface/40">
+              <OptionRow
+                icon={<Scale className="h-4 w-4" />}
+                title="Compare two paths"
+                description="Simulate two options side by side — stay vs. quit."
+                badge="Pro"
+                active={compareMode}
                 onClick={() => {
                   if (!isSubscriber) {
                     setCompareUpsell(true);
@@ -248,53 +253,47 @@ export default function SimulateForm() {
                   }
                   setCompareMode((v) => !v);
                 }}
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-fg-mute transition-colors hover:text-fg-soft"
-              >
-                <span>{compareMode ? "−" : "+"}</span>
-                Compare two paths — Pro
-              </button>
-              {compareUpsell && !isSubscriber && (
-                <div className="mt-3 rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-4">
-                  <p className="text-sm text-fg-soft">
-                    Simulate two options at once — stay vs. quit, this city vs. that — side by side.
-                    A Pro feature.
-                  </p>
-                  <div className="mt-3 max-w-xs">
-                    <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4">
-              <button
-                type="button"
+              />
+              <OptionRow
+                icon={<Sparkles className="h-4 w-4" />}
+                title="Add context"
+                description="Age, priorities, risk — for a sharper answer."
+                badge="optional"
+                active={showContext}
                 onClick={() => setShowContext((v) => !v)}
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-fg-mute transition-colors hover:text-fg-soft"
-              >
-                <span>{showContext ? "−" : "+"}</span>
-                Add context — sharper answer (optional)
-              </button>
-
-              <AnimatePresence initial={false}>
-                {showContext && (
-                  <motion.div
-                    key="context"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mt-4 space-y-4 rounded-2xl border border-border bg-surface/30 p-4">
-                      <ChipRow label="Your age" options={AGE_OPTIONS} value={ageRange} onSelect={setAgeRange} />
-                      <ChipRow label="What matters most right now" options={PRIORITY_OPTIONS} value={priority} onSelect={setPriority} />
-                      <ChipRow label="Risk appetite" options={RISK_OPTIONS} value={riskTolerance} onSelect={setRiskTolerance} />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              />
             </div>
+
+            {compareUpsell && !isSubscriber && (
+              <div className="mt-3 rounded-2xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 to-surface/60 p-4">
+                <p className="text-sm text-fg-soft">
+                  Simulate two options at once — stay vs. quit, this city vs. that — side by side.
+                  A Pro feature.
+                </p>
+                <div className="mt-3 max-w-xs">
+                  <UpgradeButton plan="pro">Unlock Pro — €5/mo</UpgradeButton>
+                </div>
+              </div>
+            )}
+
+            <AnimatePresence initial={false}>
+              {showContext && (
+                <motion.div
+                  key="context"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-3 space-y-4 rounded-2xl border border-border bg-surface/30 p-4">
+                    <ChipRow label="Your age" options={AGE_OPTIONS} value={ageRange} onSelect={setAgeRange} />
+                    <ChipRow label="What matters most right now" options={PRIORITY_OPTIONS} value={priority} onSelect={setPriority} />
+                    <ChipRow label="Risk appetite" options={RISK_OPTIONS} value={riskTolerance} onSelect={setRiskTolerance} />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {error && (
               <div className="mt-3 rounded-xl border border-magenta/40 bg-magenta/10 px-4 py-3 text-sm text-magenta">
@@ -328,6 +327,57 @@ export default function SimulateForm() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function OptionRow({
+  icon,
+  title,
+  description,
+  badge,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  badge?: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex w-full items-center gap-3.5 px-4 py-3.5 text-left transition-colors ${
+        active ? "bg-violet/10" : "hover:bg-surface-hi/60"
+      }`}
+    >
+      <span
+        className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl border transition-colors ${
+          active
+            ? "border-violet-glow/60 bg-violet/20 text-violet-glow"
+            : "border-border-hi bg-surface/60 text-fg-soft"
+        }`}
+      >
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <span className="font-medium text-fg">{title}</span>
+          {badge && (
+            <span className="rounded-full border border-border-hi px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-fg-mute">
+              {badge}
+            </span>
+          )}
+        </span>
+        <span className="mt-0.5 block text-sm text-fg-soft">{description}</span>
+      </span>
+      <span className={`flex-shrink-0 transition-colors ${active ? "text-violet-glow" : "text-fg-mute"}`}>
+        {active ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+      </span>
+    </button>
   );
 }
 
