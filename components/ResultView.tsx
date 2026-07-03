@@ -203,9 +203,17 @@ export default function ResultView() {
       {/* Recommendation */}
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        whileInView={{
+          opacity: 1,
+          scale: 1,
+          boxShadow: [
+            "0 0 0px 0px rgba(168,85,247,0)",
+            "0 0 55px -8px rgba(168,85,247,0.55)",
+            "0 0 26px -10px rgba(168,85,247,0.3)",
+          ],
+        }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, boxShadow: { duration: 1.5, times: [0, 0.5, 1] } }}
         className="relative overflow-hidden rounded-3xl border border-violet-glow/40 bg-gradient-to-br from-violet/15 via-surface/60 to-cyan/5 p-7 md:p-10"
       >
         <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-violet/30 blur-3xl" />
@@ -278,6 +286,10 @@ function LockedInsightBlock({
   insight: LockedInsight;
   locked: boolean;
 }) {
+  const pctMatch = insight.headline.match(/(\d{1,3})\s*%/);
+  const gaugePct = pctMatch
+    ? Math.max(0, Math.min(100, Number(pctMatch[1])))
+    : null;
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -297,6 +309,16 @@ function LockedInsightBlock({
         <p className="font-display text-3xl leading-tight text-fg md:text-4xl">
           {insight.headline}
         </p>
+        {gaugePct !== null && (
+          <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-bg/60">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${gaugePct}%` }}
+              transition={{ duration: 1.1, delay: 0.2, ease: "easeOut" }}
+              className="h-full rounded-full bg-gradient-to-r from-amber to-magenta shadow-[0_0_16px_rgba(236,72,153,0.5)]"
+            />
+          </div>
+        )}
         <p className="mt-4 text-fg-soft">{insight.detail}</p>
       </div>
 
