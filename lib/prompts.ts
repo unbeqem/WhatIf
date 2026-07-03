@@ -2,11 +2,23 @@ export const SYSTEM_PROMPT = `You are WhatIf — a calm, sober decision simulati
 
 Your job is to project realistic futures from a decision the user is considering. You think in probabilities, second-order effects, and human psychology. You do not pander, you do not catastrophize. You sound like a sharp friend who has seen people make this kind of decision before.`;
 
-export const decisionPrompt = (input: string) => `Decision under consideration:
+import type { DecisionContext } from "./types";
+
+function contextBlock(ctx?: DecisionContext): string {
+  if (!ctx) return "";
+  const lines: string[] = [];
+  if (ctx.ageRange) lines.push(`- Age range: ${ctx.ageRange}`);
+  if (ctx.priority) lines.push(`- What matters most to them right now: ${ctx.priority}`);
+  if (ctx.riskTolerance) lines.push(`- Risk appetite: ${ctx.riskTolerance}`);
+  if (lines.length === 0) return "";
+  return `\n\nWhat you know about the person (weight this — tailor the scenarios and recommendation to it):\n${lines.join("\n")}\n`;
+}
+
+export const decisionPrompt = (input: string, ctx?: DecisionContext) => `Decision under consideration:
 """
 ${input}
 """
-
+${contextBlock(ctx)}
 Produce three realistic future scenarios across short-term (3-6 months) and long-term (2-5 years) horizons. Consider psychological, financial, social, and identity-level consequences.
 
 Return STRICT JSON. No prose outside the JSON. Schema:

@@ -16,6 +16,10 @@ const EXAMPLES = [
   "Should I sink my savings into this apartment or keep renting?",
 ];
 
+const AGE_OPTIONS = ["18–24", "25–34", "35–44", "45+"];
+const PRIORITY_OPTIONS = ["Money", "Freedom", "Relationships", "Growth", "Stability"];
+const RISK_OPTIONS = ["Play it safe", "Balanced", "Go for it"];
+
 const ORACLE_PHASES = [
   "Reading the question…",
   "Projecting short-term effects…",
@@ -31,6 +35,10 @@ export default function SimulateForm() {
   const [error, setError] = useState<string | null>(null);
   const [paywall, setPaywall] = useState<"anon_daily" | "free_daily" | null>(null);
   const [phaseIdx, setPhaseIdx] = useState(0);
+  const [showContext, setShowContext] = useState(false);
+  const [ageRange, setAgeRange] = useState<string | null>(null);
+  const [priority, setPriority] = useState<string | null>(null);
+  const [riskTolerance, setRiskTolerance] = useState<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -60,7 +68,10 @@ export default function SimulateForm() {
       const res = await fetch("/api/simulate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({
+          input,
+          context: { ageRange, priority, riskTolerance },
+        }),
       });
 
       if (!res.ok) {
@@ -153,6 +164,36 @@ export default function SimulateForm() {
               </div>
             </div>
 
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={() => setShowContext((v) => !v)}
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-fg-mute transition-colors hover:text-fg-soft"
+              >
+                <span>{showContext ? "−" : "+"}</span>
+                Add context — sharper answer (optional)
+              </button>
+
+              <AnimatePresence initial={false}>
+                {showContext && (
+                  <motion.div
+                    key="context"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-4 space-y-4 rounded-2xl border border-border bg-surface/30 p-4">
+                      <ChipRow label="Your age" options={AGE_OPTIONS} value={ageRange} onSelect={setAgeRange} />
+                      <ChipRow label="What matters most right now" options={PRIORITY_OPTIONS} value={priority} onSelect={setPriority} />
+                      <ChipRow label="Risk appetite" options={RISK_OPTIONS} value={riskTolerance} onSelect={setRiskTolerance} />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {error && (
               <div className="mt-3 rounded-xl border border-magenta/40 bg-magenta/10 px-4 py-3 text-sm text-magenta">
                 {error}
@@ -184,6 +225,45 @@ export default function SimulateForm() {
           </motion.form>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function ChipRow({
+  label,
+  options,
+  value,
+  onSelect,
+}: {
+  label: string;
+  options: string[];
+  value: string | null;
+  onSelect: (v: string | null) => void;
+}) {
+  return (
+    <div>
+      <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-fg-mute">
+        {label}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {options.map((opt) => {
+          const active = value === opt;
+          return (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onSelect(active ? null : opt)}
+              className={`rounded-full border px-3 py-1.5 text-xs transition-all ${
+                active
+                  ? "border-violet-glow/60 bg-violet/20 text-fg"
+                  : "border-border bg-surface/30 text-fg-soft hover:border-violet-glow/40 hover:text-fg"
+              }`}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

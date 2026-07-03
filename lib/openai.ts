@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { SYSTEM_PROMPT, decisionPrompt } from "./prompts";
-import type { SimulationResult } from "./types";
+import type { SimulationResult, DecisionContext } from "./types";
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -8,7 +8,10 @@ const client = apiKey ? new OpenAI({ apiKey }) : null;
 
 export const isLive = Boolean(client);
 
-export async function simulateDecision(input: string): Promise<SimulationResult> {
+export async function simulateDecision(
+  input: string,
+  ctx?: DecisionContext,
+): Promise<SimulationResult> {
   if (!client) {
     return demoSimulation(input);
   }
@@ -19,7 +22,7 @@ export async function simulateDecision(input: string): Promise<SimulationResult>
     temperature: 0.7,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: decisionPrompt(input) },
+      { role: "user", content: decisionPrompt(input, ctx) },
     ],
   });
 

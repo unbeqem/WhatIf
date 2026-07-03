@@ -12,6 +12,13 @@ export type LockedInsight = {
   detail: string;
 };
 
+// Optional, user-supplied context to make a simulation bespoke. All fields optional.
+export type DecisionContext = {
+  ageRange?: string;
+  priority?: string;
+  riskTolerance?: string;
+};
+
 export type SimulationResult = {
   scenarios: Scenario[];
   most_likely: string;

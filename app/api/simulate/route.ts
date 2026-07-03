@@ -5,18 +5,35 @@ import { checkBurst } from "@/lib/ratelimit";
 import { checkQuota, logUsage, resolveActor } from "@/lib/quota";
 import { saveSimulation } from "@/lib/history";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { DecisionContext } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const MIN_INPUT = 8;
 const MAX_INPUT = 1500;
+const CONTEXT_MAX = 60;
+
+// Only accept the three known context fields, as trimmed short strings.
+function sanitizeContext(raw: unknown): DecisionContext | undefined {
+  if (typeof raw !== "object" || raw === null) return undefined;
+  const r = raw as Record<string, unknown>;
+  const pick = (v: unknown) =>
+    typeof v === "string" && v.trim() ? v.trim().slice(0, CONTEXT_MAX) : undefined;
+  const ctx: DecisionContext = {
+    ageRange: pick(r.ageRange),
+    priority: pick(r.priority),
+    riskTolerance: pick(r.riskTolerance),
+  };
+  return ctx.ageRange || ctx.priority || ctx.riskTolerance ? ctx : undefined;
+}
 
 export async function POST(req: NextRequest) {
   // -------- Step 0: parse + validate input (ABUSE-02) --------
   const body = await req.json().catch(() => null);
   const input = typeof body?.input === "string" ? body.input : "";
   const trimmedLen = input.trim().length;
+  const context = sanitizeContext(body?.context);
 
   // Resolve identity now so we can log validation failures consistently.
   const anon = getAnonIdentity(req);
@@ -110,7 +127,7 @@ export async function POST(req: NextRequest) {
 
   // -------- Step 3: run the simulation --------
   try {
-    const result = await simulateDecision(input);
+    const result = await simulateDecision(input, context);
 
     // -------- Step 4: log the accepted usage (counts toward 24h cap) --------
     await logUsage({
