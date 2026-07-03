@@ -14,7 +14,7 @@ progress:
 
 # STATE: WhatIf
 
-**Last updated:** 2026-07-02
+**Last updated:** 2026-07-03
 **Updated by:** gsd-execute-phase 4 — Plan 04-01 (legal pages + test-mode notice) executed
 
 ## Project Reference
@@ -152,6 +152,7 @@ Backlog / v2 (post current milestone) — captured 2026-07-02, in `.planning/tod
 | 260702-h9x | Plan-aware final CTA — hide "first question" hint for returning subscribers | 2026-07-02 | 12fa37a | [260702-h9x-hide-first-question-hint-subscribers](./quick/260702-h9x-hide-first-question-hint-subscribers/) |
 | 260702-p2k | Email-verified success page (/verified) + auto-redirect + expired-link state | 2026-07-02 | 0acb9bc | [260702-p2k-verified-success-page](./quick/260702-p2k-verified-success-page/) |
 | 260702-r5t | Decision history for Pro/Creator (migration 0004 + /history + write on simulate) | 2026-07-02 | 315eb90 | [260702-r5t-decision-history](./quick/260702-r5t-decision-history/) |
+| 260703-eum | Clearer auth errors — weak_password (exact rule) / email_not_confirmed / email_exists instead of generic 500 | 2026-07-03 | 28c2b4f | [260703-eum-clearer-auth-error-handling-weak-passwor](./quick/260703-eum-clearer-auth-error-handling-weak-passwor/) |
 
 ## Session Continuity
 
