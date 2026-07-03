@@ -56,6 +56,11 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
+          {me?.authenticated && (
+            <Link href="/history" className="transition-colors hover:text-fg">
+              History
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -111,6 +116,14 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
+          {me?.authenticated && (
+            <Link
+              href="/history"
+              className="rounded-lg px-3 py-2.5 text-fg-soft transition-colors hover:bg-surface-hi hover:text-fg"
+            >
+              History
+            </Link>
+          )}
           <Link
             href="/decision"
             className="mt-1 inline-flex items-center justify-between rounded-lg bg-gradient-to-br from-violet to-magenta px-3 py-2.5 font-medium text-white"
