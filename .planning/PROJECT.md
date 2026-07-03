@@ -32,6 +32,14 @@ A user must be able to type a decision, get a sober three-future simulation in s
 - ✓ Social-proof block: testimonial cards + honest animated counter — v1 Phase 3
 - ✓ Stronger, more visceral / TikTok-clip-ready example prompts — v1 Phase 3
 - ✓ Creator-tier shareable 9:16 story-card export (PNG download) — v1 Phase 3
+- ✓ Decision history persisted for Pro/Creator + `/history` page + nav link — v1 Phase 3 / post-launch
+- ✓ Visible blurred locked-insight paywall on free results — post-Phase-3 iteration (2026-07-03)
+- ✓ Annual billing + one-time €3 deep-dive unlock — post-Phase-3 iteration (2026-07-03)
+- ✓ Free watermarked story cards (clean export stays Creator) — post-Phase-3 iteration (2026-07-03)
+- ✓ Pro-gated refine & branch re-simulation — post-Phase-3 iteration (2026-07-03)
+- ✓ Optional structured pre-simulation context (age/priority/risk) — post-Phase-3 iteration (2026-07-03)
+- ✓ Pro-gated side-by-side two-path comparison — post-Phase-3 iteration (2026-07-03)
+- ✓ 30-day follow-up email loop (code path; needs Resend key + cron on deploy) — post-Phase-3 iteration (2026-07-03)
 
 ### Active
 
@@ -46,7 +54,6 @@ A user must be able to type a decision, get a sober three-future simulation in s
 
 - Native mobile app — web-first, mobile via responsive PWA later
 - OAuth login (Google/Apple) — email/password sufficient for v1, less compliance surface
-- Decision history / dashboard — Pro unlocks "history" mention but full UI is v2
 - Team accounts / sharing inside the product — Creator export covers external sharing
 - AI fine-tuning or custom models — gpt-4o-mini is enough for v1; revisit at scale
 - Webhook for delivering results to email — soft paywall expects in-session conversion
@@ -100,4 +107,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-01 — Phase 3 (Polish + New Features) complete; only Phase 4 (Live Deploy) remains.*
+*Last updated: 2026-07-03 — Phase 3 complete + 8 profitability/retention features shipped (paywall, annual/one-time pricing, watermarked sharing, refine, context, comparison, history discoverability, follow-up loop). Only Phase 4 (Live Deploy) remains.*
