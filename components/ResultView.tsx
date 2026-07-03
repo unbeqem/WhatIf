@@ -101,6 +101,7 @@ export default function ResultView() {
   const [data, setData] = useState<Stored | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [oneTimeUnlocked, setOneTimeUnlocked] = useState(false);
+  const reduce = useReducedMotion();
   const me = useMe();
   // Show the upsell only once we know the viewer is NOT a subscriber, so Pro/Creator
   // users never flash the "Unlock Pro" block. While loading (me undefined) it stays hidden.
@@ -149,11 +150,23 @@ export default function ResultView() {
 
   return (
     <div className="space-y-12">
-      {/* Question echo */}
+      {/* Question echo — one-time glow signals "the result is ready" */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        animate={
+          reduce
+            ? { opacity: 1, y: 0 }
+            : {
+                opacity: 1,
+                y: 0,
+                boxShadow: [
+                  "0 0 0px 0px rgba(34,211,238,0)",
+                  "0 0 45px -10px rgba(34,211,238,0.5)",
+                  "0 0 0px 0px rgba(34,211,238,0)",
+                ],
+              }
+        }
+        transition={{ duration: 0.5, boxShadow: { duration: 1.8, times: [0, 0.4, 1] } }}
         className="relative rounded-3xl border border-border bg-surface/40 p-6 md:p-8"
       >
         <div className="mb-3 flex items-center gap-2">
@@ -274,6 +287,11 @@ export default function ResultView() {
         </Link>
 
         <ShareCard input={input} result={result} me={me} />
+      </div>
+
+      {/* Faint brand mark — so screenshots carry the URL (free distribution) */}
+      <div className="pt-1 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-fg-mute/70">
+        what-if.tech
       </div>
     </div>
   );
